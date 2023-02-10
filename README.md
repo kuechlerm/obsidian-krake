@@ -2,10 +2,7 @@
 Obsidian Plugin zur Aufgabenverwaltung (GTD-ish).
 
 ## TODO
-- neues git-Repo
-- publish git-repo
 - Issues anlegen?
-- in Discord veröffentlichen
 
 ## Projekt-Ziele
 - flexible Aufgabenverwaltung in Obsidian
@@ -23,7 +20,7 @@ Obsidian Plugin zur Aufgabenverwaltung (GTD-ish).
 - pnpm
 - svelte-kit
 - aktuellste Version von Obsidian mit [Hot Reload Plugin](https://github.com/pjeby/hot-reload)
-- dieses Repo in einen Dev-Vault klonen ()`./<mein Dev Vault>/.obsidian/plugins/obsidian-krake/`)
+- dieses Repo in einen Dev-Vault klonen (`./<mein Dev Vault>/.obsidian/plugins/obsidian-krake/`)
   - main.js und styles.css (nach Build) + manifest.json befinden sich in Root-Folder, damit Dev-Vault das Plugin erkennt und nutzt
 
 ### Workflow
@@ -31,7 +28,7 @@ Obsidian Plugin zur Aufgabenverwaltung (GTD-ish).
 - `pnpm build` in `./ui_components` aktualisiert Svelte Componenten (und anderen Kram) in plugin
 
 ## "Deploy"
-Aktuell kann man `./plugin` bauen (`pnpm build:prod`) und den Inhalt aus `./plugin/build` und `./plugin/manifest.json` aus dem Root-Folder in einen Obsidian Vault Plugin Ordner kopieren (`./<mein Vault>/.obsidian/plugins/obsidian-krake/`).
+Aktuell kann man `./plugin` bauen (`pnpm build:prod`) und `main.js`, `styles.css` und `./manifest.json` aus dem Root-Folder in einen Obsidian Vault Plugin Ordner kopieren (`./<mein Vault>/.obsidian/plugins/obsidian-krake/`).
 
 ### Tools
 - ist auf die neuste Version von Obisdian ausgelegt
