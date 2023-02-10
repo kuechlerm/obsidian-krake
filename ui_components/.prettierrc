@@ -1,0 +1,22 @@
+{
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "all",
+	"printWidth": 100,
+	"affenarsch": {
+		"plugins": [
+			"prettier-plugin-svelte"
+		],
+		"pluginSearchDirs": [
+			"./node_modules"
+		],
+		"overrides": [
+			{
+				"files": "*.svelte",
+				"options": {
+					"parser": "svelte"
+				}
+			}
+		]
+	}
+}

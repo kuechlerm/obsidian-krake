@@ -1,0 +1,10 @@
+{
+    "id": "obsidian-krake",
+    "name": "Obsidian Krake",
+    "version": "1.0.10",
+    "minAppVersion": "1.0.0",
+    "description": "TODO",
+    "author": "kuechlerm@gmail.com",
+    "authorUrl": "TODO",
+    "isDesktopOnly": false
+}
