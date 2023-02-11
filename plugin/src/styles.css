@@ -1,0 +1,3 @@
+/* @tailwind base; geht nicht, überschreibt Obsidian Kram */
+@tailwind components;
+@tailwind utilities;
