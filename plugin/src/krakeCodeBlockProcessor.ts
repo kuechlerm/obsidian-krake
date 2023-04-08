@@ -10,6 +10,7 @@ import {
 } from 'ui-components';
 import { delete_file, move_file, open_next_daily, open_path } from './helpers';
 import { EntrySuggest } from './EntrySuggest';
+import Test from './components/Test.svelte';
 
 export const processKrakeCodeBlock =
     (app: App) =>
@@ -105,7 +106,18 @@ export const processKrakeCodeBlock =
             return;
         }
 
-        el.createEl('div', { text: 'Error. Unknown or missing "type".' });
+        if (config.type === 'test') {
+            new Test({
+                target: el,
+                props: {},
+            });
+
+            return;
+        }
+
+        el.createEl('div', {
+            text: `Error. Unknown or missing type "${config.type}".`,
+        });
     };
 
 function parseConfig(source: string, ctx: MarkdownPostProcessorContext) {
