@@ -17,6 +17,8 @@ import type { Topic } from './types';
 import type { Project } from './types';
 import type { Task } from './types';
 import type { Entry } from './types';
+import { migrate_db } from './migrate_db';
+import { get_collection } from './helper';
 
 // @ts-ignore
 const version = __version__;
@@ -37,9 +39,6 @@ export default class ObsidianKrakePlugin extends Plugin {
         console.log('obsidian-krake', version);
 
         await this.loadSettings();
-
-        // TODO does it work at this point?
-        await this.init_db();
 
         this.registerView(
             OK_Structrue_View.getViewTypeName(),
@@ -108,9 +107,21 @@ export default class ObsidianKrakePlugin extends Plugin {
                 db.change_path(old_path, file.path, file.basename);
             })
         );
+
+        // this.registerEvent(
+        //     this.app.vault.on('modify', (file) => {
+        //         console.log('change', file);
+        //     })
+        // );
     }
 
     async init_db() {
+        // TODO remove this after migration
+
+        console.log('+++ init_db');
+
+        await migrate_db(this.app);
+
         const topics = await this.get_entries<Topic>(paths.topic);
         const projects = await this.get_entries<Project>(paths.project);
         const tasks = await this.get_entries<Task>(paths.task);
@@ -120,8 +131,6 @@ export default class ObsidianKrakePlugin extends Plugin {
             projects,
             tasks,
         };
-
-        console.log('init_db', init_db);
 
         db.init(init_db);
     }
@@ -137,83 +146,97 @@ export default class ObsidianKrakePlugin extends Plugin {
 
         // TODO better without forof?
         for (const file of entries_folder.children as TFile[]) {
-            const content = await this.app.vault.cachedRead(file);
-            const krake_block = content
-                .match(/```krake\ntype:entry-header([\s\S]*?)\n```/)
-                ?.first();
+            try {
+                const content = await this.app.vault.cachedRead(file);
 
-            if (!krake_block) {
-                continue;
+                // TODO match ist nicht richtig
+                const krake_block = content
+                    .match(/```krake\ntype:entry-header([\s\S]*?)\n```/)
+                    ?.first();
+
+                if (!krake_block) {
+                    continue;
+                }
+
+                const lines = krake_block.split('\n');
+                const prop_lines = lines.slice(2, -1);
+
+                const props: any = prop_lines.reduce((obj, l) => {
+                    const [key, value] = l.split(':').map((x) => x.trim());
+                    return { ...obj, [key]: value };
+                }, {});
+
+                let entry: Entry | undefined;
+                if (path === paths.topic) {
+                    entry = create_default_topic({
+                        name: file.basename,
+                        file_path: file.path,
+                        created: new Date(file.stat.ctime),
+                    });
+
+                    if (props.children) {
+                        // TODO this is a hack
+                        (entry as any)._children_text = props.children;
+                    }
+                }
+
+                if (path === paths.project) {
+                    entry = create_default_project({
+                        name: file.basename,
+                        file_path: file.path,
+                        created: new Date(file.stat.ctime),
+                    });
+
+                    if (props.due_date)
+                        (entry as Project).due_date = new Date(
+                            parseInt(props.due_date)
+                        );
+
+                    if (props.children) {
+                        // TODO this is a hack
+                        (entry as any)._children_text = props.children;
+                    }
+                }
+
+                if (path === paths.task) {
+                    entry = create_default_task({
+                        name: file.basename,
+                        file_path: file.path,
+                        created: new Date(file.stat.ctime),
+                    });
+
+                    if (props.due_date)
+                        (entry as Task).due_date = new Date(
+                            parseInt(props.due_date)
+                        );
+
+                    if (props.do_date)
+                        (entry as Task).do_date = new Date(
+                            parseInt(props.do_date)
+                        );
+                }
+
+                if (!entry) throw new Error('not implemented');
+
+                if (props.parents) entry.parents = JSON.parse(props.parents);
+
+                if (props.done) entry.done = new Date(parseInt(props.done));
+                if (props.last_review)
+                    entry.last_review = new Date(parseInt(props.last_review));
+
+                entries.push(entry as T);
+            } catch (error) {
+                console.error(error);
             }
-
-            const lines = krake_block.split('\n');
-            const prop_lines = lines.slice(2, -1);
-
-            const props: any = prop_lines.reduce((obj, l) => {
-                const [key, value] = l.split(':').map((x) => x.trim());
-                return { ...obj, [key]: value };
-            }, {});
-
-            // TODO the typing is ... not great
-            let entry: Entry | undefined;
-            if (path === paths.topic) {
-                entry = create_default_topic({
-                    name: file.basename,
-                    file_path: file.path,
-                    created: new Date(file.stat.ctime),
-                });
-
-                if (props.children)
-                    (entry as Topic).children = JSON.parse(props.children);
-            }
-
-            if (path === paths.project) {
-                entry = create_default_project({
-                    name: file.basename,
-                    file_path: file.path,
-                    created: new Date(file.stat.ctime),
-                });
-
-                if (props.due_date)
-                    (entry as Project).due_date = new Date(
-                        parseInt(props.due_date)
-                    );
-
-                if (props.children)
-                    (entry as Project).children = JSON.parse(props.children);
-            }
-
-            if (path === paths.task) {
-                entry = create_default_task({
-                    name: file.basename,
-                    file_path: file.path,
-                    created: new Date(file.stat.ctime),
-                });
-
-                if (props.due_date)
-                    (entry as Task).due_date = new Date(
-                        parseInt(props.due_date)
-                    );
-
-                if (props.do_date)
-                    (entry as Task).do_date = new Date(parseInt(props.do_date));
-            }
-
-            if (!entry) throw new Error('not implemented');
-
-            if (props.parents) entry.parents = JSON.parse(props.parents);
-
-            if (props.done) entry.done = new Date(parseInt(props.done));
-            if (props.last_review)
-                entry.last_review = new Date(parseInt(props.last_review));
-
-            entries.push(entry as T);
         }
 
         return entries;
     }
 
-    onWorkspaceLayoutReady(): void {}
+    onWorkspaceLayoutReady(): void {
+        // TODO loading flag in DB?
+        this.init_db();
+    }
 
     onunload() {}
 

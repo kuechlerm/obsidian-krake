@@ -46,12 +46,21 @@ export type Topic = Entry & {
     children: Child[];
 };
 
-// -----
-
 export type DB = {
     topics: Topic[];
     projects: Project[];
     tasks: Task[];
+};
+// ----------------------------------------------------------------
+
+// store metadata of an entry in the entires md file
+// use a minimal representation of the metadata
+
+export type EntryFileRepresentation = {
+    // not needed: name, file_path, type, done
+    last_review: string; // as date.getTime()
+    // we store children as there are less files to update if you rename a parent (update none) or a child (update only the parents)
+    children: string; // children -> [type],[name];[type],[name];...
 };
 
 // ----------------------------------------------------------------

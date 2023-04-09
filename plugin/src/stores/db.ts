@@ -12,6 +12,7 @@ const empty_db = (): DB => ({
 // TODO use on init if no Inbox-Topic exists
 function inbox_content() {
     const lines = [
+        '',
         '```krake',
         'type:entry-header',
         '```',
@@ -106,8 +107,40 @@ function create_db_store() {
             init_db.topics.push(inbox);
         }
 
+        console.log('+++++ init done', init_db);
+
         store.set(init_db);
+
+        // has to run after store.set
+        for (const project of init_db.projects) {
+            process_children(init_db, (project as any)._children_text, project);
+        }
+
+        for (const topic of init_db.topics) {
+            process_children(init_db, (topic as any)._children_text, topic);
+        }
     };
+
+    function process_children(db: DB, prop_text: string, entry: Entry) {
+        // eg: 2,A;2,B
+        if (!prop_text) return;
+
+        const child_strings = prop_text.split(';');
+
+        child_strings.forEach((child_string) => {
+            const [child_type, child_name] = child_string.split(',');
+
+            const collection = get_collection(
+                db,
+                parseInt(child_type) as 0 | 1 | 2
+            );
+
+            const child = collection.find((c) => c.name === child_name);
+            if (!child) return;
+
+            add_parent(child, entry);
+        });
+    }
 
     const add_task = async (task: Task) => {
         await check_parents(task);
@@ -222,6 +255,7 @@ function create_db_store() {
                 curr,
                 new_parent_info.type
             ).find((e) => e.file_path === new_parent_info.file_path);
+
             if (!parent_entry) throw new Error('No parent entry found');
 
             // Add this entry as a Child to the Parent
