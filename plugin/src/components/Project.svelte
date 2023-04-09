@@ -9,9 +9,20 @@
     export let project: Project;
     export let open: (file_path: string) => void;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let write_metadata: (
+        file_path: string,
+        metadata: { [key: string]: string }
+    ) => Promise<void>;
 
     async function save() {
         $db.projects = $db.projects;
+
+        const metadata: any = {};
+        if (project.due_date)
+            metadata['due_date'] = project.due_date.getTime().toString();
+
+        // TODO fires 3 times!?
+        await write_metadata(project.file_path, metadata);
     }
 
     async function toggle_done(e: Event) {

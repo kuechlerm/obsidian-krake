@@ -4,6 +4,7 @@ import {
     move_file,
     open_next_daily,
     open_path,
+    write_metadata,
 } from './obsidian_helpers';
 import { EntrySuggest } from './obsidian_controls/EntrySuggest';
 import type { Parent } from './types';
@@ -28,6 +29,7 @@ export const process_krake_codeblock =
                 props: {
                     open: open_path(app),
                     move_file: (f, t) => move_file(app, f, t),
+                    write_metadata: write_metadata(app),
                     config,
                 },
             });
@@ -40,6 +42,7 @@ export const process_krake_codeblock =
                 props: {
                     open: open_path(app),
                     move_file: (f, t) => move_file(app, f, t),
+                    write_metadata: write_metadata(app),
                     config,
                 },
             });
@@ -65,6 +68,7 @@ export const process_krake_codeblock =
                     open: open_path(app),
                     move_file: (f, t) => move_file(app, f, t),
                     delete_file: delete_file(app),
+                    write_metadata: write_metadata(app),
                     suggest_project: (exclude_paths) => {
                         return new Promise<Omit<Parent, 'parents'>>(
                             (resolve) => {

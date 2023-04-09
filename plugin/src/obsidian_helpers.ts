@@ -131,3 +131,50 @@ export const delete_file = (app: App) => async (file_path: string) => {
 
     await app.vault.delete(file);
 };
+
+export const write_metadata =
+    (app: App) =>
+    async (file_path: string, metadata: { [key: string]: string }) => {
+        console.log('write_metadata', file_path, metadata);
+
+        const project_file = app.vault.getAbstractFileByPath(
+            file_path
+        ) as TFile | null;
+        if (!project_file) return;
+
+        const project_content = await app.vault.read(project_file);
+
+        const krake_block = project_content
+            .match(/```krake\ntype:entry-header([\s\S]*?)\n```/)
+            ?.first();
+
+        if (!krake_block) return;
+
+        const lines = krake_block.split('\n');
+        const prop_lines = lines.slice(2, -1);
+        let props_obj = Object.fromEntries(
+            prop_lines.map((line) => line.split(':'))
+        );
+
+        props_obj = { ...props_obj, ...metadata };
+
+        const krake_block_update = [
+            '```krake',
+            'type:entry-header',
+            ...Object.entries(props_obj).map(
+                ([key, value]) => `${key}:${value}`
+            ),
+            '```',
+        ].join('\n');
+
+        const [empty_line, after_krake_block] =
+            project_content.split(krake_block);
+
+        const project_update = [
+            empty_line,
+            krake_block_update,
+            after_krake_block,
+        ].join('');
+
+        await app.vault.modify(project_file, project_update);
+    };

@@ -14,7 +14,11 @@
     import Flyout from './subcomponents/Flyout.svelte';
     import type { Entry, Parent } from '../types';
     import { paths } from '../paths';
-    import { days_ago_text, get_collection } from '../helper';
+    import {
+        days_ago_text,
+        get_collection,
+        name_from_file_path,
+    } from '../helper';
     import { db } from '../stores/db';
 
     export let path: string;
@@ -28,6 +32,10 @@
     ) => Promise<Omit<Parent, 'parents'>>;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
     export let delete_file: (file_path: string) => Promise<void>;
+    export let write_metadata: (
+        file_path: string,
+        metadata: { [key: string]: string }
+    ) => Promise<void>;
 
     $: entry_type = (
         path.startsWith(paths.task) ? 0 : path.startsWith(paths.project) ? 1 : 2
@@ -41,9 +49,20 @@
     let show_entry_picker = false;
 
     async function save() {
+        if (!entry) return;
+
         if (entry_type === 0) $db.tasks = $db.tasks;
         if (entry_type === 1) $db.projects = $db.projects;
         if (entry_type === 2) $db.topics = $db.topics;
+
+        const metadata: any = {};
+        if (entry.do_date)
+            metadata['do_date'] = entry.do_date.getTime().toString();
+        if (entry.due_date)
+            metadata['due_date'] = entry.due_date.getTime().toString();
+
+        // TODO fires 3 times!?
+        await write_metadata(entry.file_path, metadata);
     }
 
     async function toggle_done(e: Event) {
@@ -69,6 +88,24 @@
         );
         await db.add_parent(entry, parent_info);
 
+        const parent = $db.projects.find(
+            (p) => p.file_path === parent_info.file_path
+        );
+
+        if (parent) {
+            const children = [
+                ...parent.children.map(
+                    (c) => `${c.type},${name_from_file_path(c.file_path)}`
+                ),
+            ]
+                .filter(Boolean)
+                .join(';');
+
+            await write_metadata(parent_info.file_path, {
+                children,
+            });
+        }
+
         actions_visible = false;
     }
 
@@ -79,6 +116,24 @@
             entry.parents.map((p) => p.file_path)
         );
         await db.add_parent(entry, parent_info);
+
+        const parent = $db.topics.find(
+            (p) => p.file_path === parent_info.file_path
+        );
+
+        if (parent) {
+            const children = [
+                ...parent.children.map(
+                    (c) => `${c.type},${name_from_file_path(c.file_path)}`
+                ),
+            ]
+                .filter(Boolean)
+                .join(';');
+
+            await write_metadata(parent_info.file_path, {
+                children,
+            });
+        }
 
         actions_visible = false;
     }
@@ -153,11 +208,13 @@
                     {days_ago_text(entry.last_review)}
                 </div>
 
-                {#if entry_type !== 2}
+                {#if entry_type === 0}
                     <DateIndicator
                         bind:date={entry.do_date}
                         on:changed={save}
                     />
+                {/if}
+                {#if entry_type !== 2}
                     <DateIndicator
                         due
                         bind:date={entry.due_date}

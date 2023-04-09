@@ -9,6 +9,10 @@
     export let config: ProjectBlockConfig;
     export let open: (path: string) => void;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let write_metadata: (
+        file_path: string,
+        metadata: { [key: string]: string }
+    ) => Promise<void>;
 
     function filter_projects(
         projects: ProjectType[],
@@ -62,7 +66,7 @@
 
 <div class="flex flex-col gap-2 mt-4">
     {#each filered_projects as project (project.file_path)}
-        <Project {project} {open} {move_file} />
+        <Project {project} {open} {move_file} {write_metadata} />
     {:else}
         <div class="text-neutral-400">No projects found</div>
     {/each}

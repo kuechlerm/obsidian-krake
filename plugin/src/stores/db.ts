@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 import type { Child, DB, Entry, Parent, Project, Task, Topic } from '../types';
 import { paths } from '../paths';
 import { get_collection } from '../helper';
+import type { App } from 'obsidian';
 
 const empty_db = (): DB => ({
     topics: [],
@@ -107,8 +108,6 @@ function create_db_store() {
             init_db.topics.push(inbox);
         }
 
-        console.log('+++++ init done', init_db);
-
         store.set(init_db);
 
         // has to run after store.set
@@ -119,6 +118,8 @@ function create_db_store() {
         for (const topic of init_db.topics) {
             process_children(init_db, (topic as any)._children_text, topic);
         }
+
+        console.log('+++++ init db', init_db);
     };
 
     function process_children(db: DB, prop_text: string, entry: Entry) {

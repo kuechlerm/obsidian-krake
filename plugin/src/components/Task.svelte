@@ -9,9 +9,22 @@
     export let task: Task;
     export let open: (file_path: string) => void;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let write_metadata: (
+        file_path: string,
+        metadata: { [key: string]: string }
+    ) => Promise<void>;
 
     async function save() {
         $db.tasks = $db.tasks;
+
+        const metadata: any = {};
+        if (task.do_date)
+            metadata['do_date'] = task.do_date.getTime().toString();
+        if (task.due_date)
+            metadata['due_date'] = task.due_date.getTime().toString();
+
+        // TODO fires 3 times!?
+        await write_metadata(task.file_path, metadata);
     }
 
     async function toggle_done(e: Event) {

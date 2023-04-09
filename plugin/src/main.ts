@@ -118,8 +118,6 @@ export default class ObsidianKrakePlugin extends Plugin {
     async init_db() {
         // TODO remove this after migration
 
-        console.log('+++ init_db');
-
         await migrate_db(this.app);
 
         const topics = await this.get_entries<Topic>(paths.topic);

@@ -9,6 +9,10 @@
     export let config: TaskBlockConfig;
     export let open: (path: string) => void;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let write_metadata: (
+        file_path: string,
+        metadata: { [key: string]: string }
+    ) => Promise<void>;
 
     function filter_tasks(tasks: TaskType[], config: TaskBlockConfig) {
         let filtered = tasks;
@@ -66,7 +70,7 @@
 
 <div class="tasks flex flex-col gap-2 mt-4">
     {#each filered_tasks as task (task.file_path)}
-        <Task {task} {open} {move_file} />
+        <Task {task} {open} {move_file} {write_metadata} />
     {:else}
         <div class="text-neutral-400">No tasks found</div>
     {/each}
