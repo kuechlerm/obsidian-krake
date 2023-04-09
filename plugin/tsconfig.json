@@ -3,25 +3,15 @@
         "baseUrl": ".",
         "inlineSources": true,
         "module": "ESNext",
-        "target": "ES6",
+        "target": "ES2021",
         "allowJs": true,
         "noImplicitAny": true,
         "moduleResolution": "node",
         "importHelpers": true,
         "isolatedModules": true,
         "strictNullChecks": true,
-        "lib": [
-            "DOM",
-            "ES5",
-            "ES6",
-            "ES7"
-        ]
+        "lib": ["DOM", "ES2021"]
     },
     "extends": "@tsconfig/svelte/tsconfig.json",
-    "include": [
-        "**/globals.d.ts",
-        "**/*.js",
-        "**/*.svelte",
-        "**/*.ts"
-    ]
+    "include": ["**/globals.d.ts", "**/*.js", "**/*.svelte", "**/*.ts"]
 }

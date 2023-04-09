@@ -7,26 +7,29 @@ devDependencies:
   '@codemirror/view':
     specifier: 6.7.3
     version: 6.7.3
+  '@floating-ui/dom':
+    specifier: 1.1.1
+    version: 1.1.1
   '@storybook/addon-essentials':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-interactions':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-links':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(react-dom@18.2.0)(react@18.2.0)
   '@storybook/blocks':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(react-dom@18.2.0)(react@18.2.0)
   '@storybook/svelte':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(svelte@3.55.1)
   '@storybook/svelte-vite':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.4)(vite@4.0.4)
   '@storybook/testing-library':
-    specifier: ^0.0.14-next.2
+    specifier: 0.0.14-next.2
     version: 0.0.14-next.2
   '@sveltejs/vite-plugin-svelte':
     specifier: 2.0.2
@@ -71,13 +74,13 @@ devDependencies:
     specifier: 4.0.1
     version: 4.0.1(postcss@8.4.21)
   react:
-    specifier: ^18.2.0
+    specifier: 18.2.0
     version: 18.2.0
   react-dom:
-    specifier: ^18.2.0
+    specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
   storybook:
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2
   svelte:
     specifier: 3.55.1
@@ -97,9 +100,6 @@ devDependencies:
   typescript:
     specifier: 4.9.4
     version: 4.9.4
-  ui-components:
-    specifier: ../ui_components/package
-    version: link:../ui_components/package
   vite:
     specifier: 4.0.4
     version: 4.0.4(@types/node@18.11.18)
@@ -190,7 +190,7 @@ packages:
       '@babel/compat-data': 7.21.4
       '@babel/core': 7.21.4
       '@babel/helper-validator-option': 7.21.0
-      browserslist: 4.21.4
+      browserslist: 4.21.5
       lru-cache: 5.1.1
       semver: 6.3.0
     dev: true
@@ -1826,6 +1826,16 @@ packages:
 
   /@fal-works/esbuild-plugin-global-externals@2.1.2:
     resolution: {integrity: sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==}
+    dev: true
+
+  /@floating-ui/core@1.2.6:
+    resolution: {integrity: sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg==}
+    dev: true
+
+  /@floating-ui/dom@1.1.1:
+    resolution: {integrity: sha512-TpIO93+DIujg3g7SykEAGZMDtbJRrmnYRCNYSjJlvIbGhBjRSNTLVbNeDQBrzy9qDgUbiWdc7KA0uZHZ2tJmiw==}
+    dependencies:
+      '@floating-ui/core': 1.2.6
     dev: true
 
   /@humanwhocodes/config-array@0.11.8:
