@@ -56,11 +56,12 @@ export const create_date_filter = (config: string) => {
 };
 
 export const days_ago_text = (date: Date) => {
-    const diff = Math.abs(differenceInDays(date, new Date()));
+    const diff = differenceInDays(date, new Date());
 
     if (diff === 0) return 'today';
 
-    return `${diff}d ago`;
+    if (diff > 0) return `in ${diff}d`;
+    return `${Math.abs(diff)}d ago`;
 };
 
 export function get_collection(db: DB, entry_type: 0 | 1 | 2): Entry[] {
