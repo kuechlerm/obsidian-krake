@@ -19,6 +19,14 @@ export default defineConfig((env) => {
             __version__: JSON.stringify(process.env.npm_package_version),
         },
 
+        test: {
+            include: ['**/*.test.ts'],
+            globals: false,
+            // environment: 'jsdom',
+            // setupFiles: ['./vitestSetup.ts'],
+            deps: { external: ['**/node_modules/**', '**/dist/**'] },
+        },
+
         build: {
             sourcemap: prod ? false : 'inline',
             minify: prod,
