@@ -1,6 +1,6 @@
 /* Obsidian theme variables */
 /* ------------------------ */
-body {
+:root {
   /* Animations */
   --anim-duration-none: 0;
   --anim-duration-superfast: 70ms;
@@ -522,7 +522,7 @@ body {
   --interactive-accent-hover: var(--color-accent-2);
 }
 
-.theme-light {
+:root {
   color-scheme: light;
   --highlight-mix-blend-mode: darken;
   --mono-rgb-0: 255, 255, 255;
@@ -723,7 +723,7 @@ iframe {
   unicode-range: U+0;
 }
 
-body {
+:root {
   --font-default: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Microsoft YaHei Light", sans-serif;
   --font-monospace-default: Menlo, SFMono-Regular, Consolas, "Roboto Mono", 'Source Code Pro', monospace;
   --font-interface-override: '??';

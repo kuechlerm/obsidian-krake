@@ -1,6 +1,8 @@
 import type { Preview } from '@storybook/svelte';
 
-// import './obsidian.css';
+// css var scropes adapted
+// TODO remove unnecessary css?
+import './obsidian.css';
 import '../src/styles.css';
 
 const preview: Preview = {

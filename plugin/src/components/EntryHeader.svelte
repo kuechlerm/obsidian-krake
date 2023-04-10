@@ -168,130 +168,143 @@
     }
 </script>
 
-<div
-    class="rounded-lg p-2 bg-{color}-600 bg-opacity-10 border border-solid border-{color}-600 space-y-2 mt-4"
->
-    {#if entry}
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                {#if entry_type !== 2}
-                    <Checkbox checked={!!entry.done} on:change={toggle_done} />
-                {/if}
+<!-- need this frame to simulate the code-block in obsidian  -->
+<div class="p-2 overflow-hidden">
+    <div
+        class="rounded-lg overflow-hidden pr-2 bg-slate-400 bg-opacity-10 border border-solid border-{color}-600 space-y-2 mt-4 shadow-md"
+    >
+        {#if entry}
+            <div class="flex gap-2">
+                <div class="bg-{color}-600 bg-opacity-70 h-auto w-3" />
 
-                <Path
-                    parents={entry.parents}
-                    {open}
-                    can_remove
-                    on:remove={remove_parent}
-                />
-            </div>
-
-            <div class="flex gap-1">
-                <div
-                    class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
-                >
-                    <div class="w-5 flex items-center">
-                        <Add />
-                    </div>
-
-                    {#if entry.created}
-                        {days_ago_text(entry.created)}
-                    {/if}
-                </div>
-                <div
-                    class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
-                >
-                    <div class="w-5 flex items-center">
-                        <Eye />
-                    </div>
-
-                    {days_ago_text(entry.last_review)}
-                </div>
-
-                {#if entry_type === 0}
-                    <DateIndicator
-                        bind:date={entry.do_date}
-                        on:changed={save}
-                    />
-                {/if}
-                {#if entry_type !== 2}
-                    <DateIndicator
-                        due
-                        bind:date={entry.due_date}
-                        on:changed={save}
-                    />
-                {/if}
-
-                <IconButton color="slate" on:click={toggle_actions}>
-                    {#if actions_visible}
-                        <XMark />
-                    {:else}
-                        <Cog />
-                    {/if}
-                </IconButton>
-            </div>
-        </div>
-
-        {#if actions_visible}
-            <div class="flex justify-end gap-2 items-enter">
-                <IconButton color="red" on:click={delete_entry}>
-                    <Trash />
-                </IconButton>
-
-                <Flyout target="entry_picker" bind:show={show_entry_picker}>
-                    <div class="flex flex-col gap-1">
-                        {#if entry_type !== 0}
-                            <div
-                                class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
-                                on:click={() => change_type(0)}
-                                on:keyup
-                            >
-                                to Task
-                            </div>
-                        {/if}
-
-                        {#if entry_type !== 1}
-                            <div
-                                class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
-                                on:click={() => change_type(1)}
-                                on:keyup
-                            >
-                                to Project
-                            </div>
-                        {/if}
-
+                <div class="flex-1 py-2 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
                         {#if entry_type !== 2}
-                            <div
-                                class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
-                                on:click={() => change_type(2)}
-                                on:keyup
-                            >
-                                to Topic
-                            </div>
+                            <Checkbox
+                                checked={!!entry.done}
+                                on:change={toggle_done}
+                            />
                         {/if}
+
+                        <Path
+                            parents={entry.parents}
+                            {open}
+                            can_remove
+                            on:remove={remove_parent}
+                        />
                     </div>
-                </Flyout>
 
-                <IconButton
-                    id="entry_picker"
-                    color="sky"
-                    on:click={() => (show_entry_picker = true)}
-                >
-                    <Pen />
-                </IconButton>
+                    <div class="flex gap-1">
+                        <div
+                            class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
+                        >
+                            <div class="w-5 flex items-center">
+                                <Add />
+                            </div>
 
-                {#if entry_type !== 2}
-                    <IconButton color="violet" on:click={add_project_parent}>
-                        <Flag />
-                    </IconButton>
-                {/if}
+                            {#if entry.created}
+                                {days_ago_text(entry.created)}
+                            {/if}
+                        </div>
+                        <div
+                            class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
+                        >
+                            <div class="w-5 flex items-center">
+                                <Eye />
+                            </div>
 
-                <IconButton color="pink" on:click={add_topic_parent}>
-                    <Folder />
-                </IconButton>
+                            {days_ago_text(entry.last_review)}
+                        </div>
+
+                        {#if entry_type === 0}
+                            <DateIndicator
+                                bind:date={entry.do_date}
+                                on:changed={save}
+                            />
+                        {/if}
+                        {#if entry_type !== 2}
+                            <DateIndicator
+                                due
+                                bind:date={entry.due_date}
+                                on:changed={save}
+                            />
+                        {/if}
+
+                        <IconButton color="slate" on:click={toggle_actions}>
+                            {#if actions_visible}
+                                <XMark />
+                            {:else}
+                                <Cog />
+                            {/if}
+                        </IconButton>
+                    </div>
+                </div>
             </div>
+
+            {#if actions_visible}
+                <div class="flex justify-end gap-2 items-enter">
+                    <IconButton color="red" on:click={delete_entry}>
+                        <Trash />
+                    </IconButton>
+
+                    <Flyout target="entry_picker" bind:show={show_entry_picker}>
+                        <div class="flex flex-col gap-1">
+                            {#if entry_type !== 0}
+                                <div
+                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    on:click={() => change_type(0)}
+                                    on:keyup
+                                >
+                                    to Task
+                                </div>
+                            {/if}
+
+                            {#if entry_type !== 1}
+                                <div
+                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    on:click={() => change_type(1)}
+                                    on:keyup
+                                >
+                                    to Project
+                                </div>
+                            {/if}
+
+                            {#if entry_type !== 2}
+                                <div
+                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    on:click={() => change_type(2)}
+                                    on:keyup
+                                >
+                                    to Topic
+                                </div>
+                            {/if}
+                        </div>
+                    </Flyout>
+
+                    <IconButton
+                        id="entry_picker"
+                        color="sky"
+                        on:click={() => (show_entry_picker = true)}
+                    >
+                        <Pen />
+                    </IconButton>
+
+                    {#if entry_type !== 2}
+                        <IconButton
+                            color="violet"
+                            on:click={add_project_parent}
+                        >
+                            <Flag />
+                        </IconButton>
+                    {/if}
+
+                    <IconButton color="pink" on:click={add_topic_parent}>
+                        <Folder />
+                    </IconButton>
+                </div>
+            {/if}
+        {:else}
+            Error. Entry not found.
         {/if}
-    {:else}
-        Error. Entry not found.
-    {/if}
+    </div>
 </div>
