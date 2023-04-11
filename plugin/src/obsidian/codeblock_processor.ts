@@ -6,14 +6,15 @@ import {
     open_path,
     write_metadata,
 } from './obsidian_helpers';
-import { EntrySuggest } from './obsidian_controls/EntrySuggest';
-import type { Parent } from './types';
-import EntryHeader from './components/EntryHeader.svelte';
-import TasksList from './components/TasksList.svelte';
-import ProjectsList from './components/ProjectsList.svelte';
-import TopicsList from './components/TopicsList.svelte';
-import { paths } from './paths';
-import DailyHeader from './components/DailyHeader.svelte';
+import { EntrySuggest } from './EntrySuggest';
+import type { Parent } from '../types';
+import EntryHeader from '../components/EntryHeader.svelte';
+import TasksList from '../components/TasksList.svelte';
+import ProjectsList from '../components/ProjectsList.svelte';
+import TopicsList from '../components/TopicsList.svelte';
+import { paths } from '../paths';
+import DailyHeader from '../components/DailyHeader.svelte';
+import { parse_config } from '../helper';
 
 export const process_krake_codeblock =
     (app: App) =>
@@ -21,7 +22,7 @@ export const process_krake_codeblock =
         // TODO why?
         // ctx.addChild()
 
-        const config = parse_config(source, ctx);
+        const config = parse_config(source, ctx.sourcePath);
 
         if (config.type === 'tasks') {
             new TasksList({
@@ -116,17 +117,3 @@ export const process_krake_codeblock =
             text: `Error. Unknown or missing type "${config.type}".`,
         });
     };
-
-function parse_config(source: string, ctx: MarkdownPostProcessorContext) {
-    const lines = source.split('\n');
-
-    const config: any = lines.reduce((obj, l) => {
-        const [key, value] = l.split(':').map((x) => x.trim());
-        return { ...obj, [key]: value };
-    }, {});
-
-    config.type ??= '';
-    config.file_path = ctx.sourcePath;
-
-    return config;
-}

@@ -1,8 +1,8 @@
 import { App, ItemView, WorkspaceLeaf } from 'obsidian';
 import { move_file, open_path } from './obsidian_helpers';
-import Overview from './components/structure/Overview.svelte';
+import Overview from '../components/structure/Overview.svelte';
 
-export class OK_Structrue_View extends ItemView {
+export class OkStructureView extends ItemView {
     view: Overview;
 
     constructor(leaf: WorkspaceLeaf, private _app: App) {

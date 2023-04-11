@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { days_ago_text, name_from_file_path } from './helper';
+import { days_ago_text, name_from_file_path, parse_config } from './helper';
 import { add } from 'date-fns';
 
 describe('helper', () => {
@@ -35,6 +35,39 @@ describe('helper', () => {
 
         test('with deep path', () => {
             expect(name_from_file_path('baz/foo/bar.md')).toBe('bar');
+        });
+    });
+
+    describe('parse_config', () => {
+        test('empty lines', () => {
+            const config = parse_config('', 'Krake/Tasks/Test.md');
+            expect(config).toEqual({
+                type: '',
+                file_path: 'Krake/Tasks/Test.md',
+            });
+        });
+
+        test('only type specified', () => {
+            const config = parse_config(
+                'type:entry-header',
+                'Krake/Tasks/Test.md'
+            );
+            expect(config).toEqual({
+                type: 'entry-header',
+                file_path: 'Krake/Tasks/Test.md',
+            });
+        });
+
+        test('multiple config lines', () => {
+            const config = parse_config(
+                'type:entry-header\ndone:true',
+                'Krake/Tasks/Test.md'
+            );
+            expect(config).toEqual({
+                type: 'entry-header',
+                done: 'true',
+                file_path: 'Krake/Tasks/Test.md',
+            });
         });
     });
 });

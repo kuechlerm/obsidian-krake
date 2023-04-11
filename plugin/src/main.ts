@@ -1,10 +1,10 @@
 import { Platform, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
-import { process_krake_codeblock } from './codeblock_processor';
-import { SampleSettingTab } from './obsidian_controls/SampleSettingTab';
+import { process_krake_codeblock } from './obsidian/codeblock_processor';
+import { SampleSettingTab } from './obsidian/SampleSettingTab';
 
 import './styles.css';
-import { create_entry } from './create_entry';
-import { OK_Structrue_View } from './ok_structure_view';
+import { create_entry } from './obsidian/commands';
+import { OkStructureView } from './obsidian/OkStructureView';
 import { paths } from './paths';
 import {
     create_default_project,
@@ -18,7 +18,6 @@ import type { Project } from './types';
 import type { Task } from './types';
 import type { Entry } from './types';
 import { migrate_db } from './migrate_db';
-import { get_collection } from './helper';
 
 // @ts-ignore
 const version = __version__;
@@ -32,7 +31,7 @@ const version = __version__;
 // };
 
 export default class ObsidianKrakePlugin extends Plugin {
-    private structure_view: OK_Structrue_View;
+    private structure_view: OkStructureView;
     // settings: MyPluginSettings;
 
     async onload() {
@@ -41,9 +40,9 @@ export default class ObsidianKrakePlugin extends Plugin {
         await this.loadSettings();
 
         this.registerView(
-            OK_Structrue_View.getViewTypeName(),
+            OkStructureView.getViewTypeName(),
             (leaf: WorkspaceLeaf) =>
-                (this.structure_view = new OK_Structrue_View(leaf, this.app))
+                (this.structure_view = new OkStructureView(leaf, this.app))
         );
 
         this.addRibbonIcon(
@@ -51,12 +50,10 @@ export default class ObsidianKrakePlugin extends Plugin {
             'OK Overview',
             async (evt: MouseEvent) => {
                 const workspace = this.app.workspace;
-                workspace.detachLeavesOfType(
-                    OK_Structrue_View.getViewTypeName()
-                );
+                workspace.detachLeavesOfType(OkStructureView.getViewTypeName());
                 const leaf = workspace.getLeaf(!Platform.isMobile);
                 await leaf.setViewState({
-                    type: OK_Structrue_View.getViewTypeName(),
+                    type: OkStructureView.getViewTypeName(),
                 });
                 workspace.revealLeaf(leaf);
             }

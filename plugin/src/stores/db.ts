@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 import type { Child, DB, Entry, Parent, Project, Task, Topic } from '../types';
 import { paths } from '../paths';
 import { get_collection } from '../helper';
-import type { App } from 'obsidian';
 
 const empty_db = (): DB => ({
     topics: [],

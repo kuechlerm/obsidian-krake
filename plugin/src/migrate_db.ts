@@ -1,6 +1,6 @@
 import type { App, TFile } from 'obsidian';
 import type { Child, Parent } from './types';
-import { write_metadata } from './obsidian_helpers';
+import { write_metadata } from './obsidian/obsidian_helpers';
 
 type Entry_JSON = {
     parents: Parent[];
