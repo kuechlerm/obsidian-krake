@@ -57,7 +57,7 @@ export const open_next_daily =
 
         if (!new_path) {
             new Notice(
-                'Kein nächstes Daily gefunden. Bitte über den Kalender anlegen.'
+                'Cannot find next daily. Please use the calendar to navigate.'
             );
             return;
         }
@@ -81,7 +81,7 @@ function find_next_daily(
 
     if (!app.vault.getAbstractFileByPath(new_path)) {
         if (count > 9) {
-            // zu viele Tage gecheckt
+            // too many days without a daily
             return null;
         }
 

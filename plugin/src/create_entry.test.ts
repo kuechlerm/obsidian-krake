@@ -301,4 +301,71 @@ describe('create_entry', () => {
             { children: '0,Test Task' }
         );
     });
+
+    test('create Project in Topic file', async () => {
+        db.init({
+            topics: [
+                create_default_topic({
+                    name: 'Topic1',
+                    file_path: `${paths.topic}/Topic1.md`,
+                }),
+            ],
+            tasks: [],
+            projects: [],
+        });
+
+        await create_entry_workflow({
+            line_no: 1,
+            type: 'project',
+            current_file_basename: 'Topic1',
+            current_file_path: `${paths.topic}/Topic1.md`,
+            ...create_mock_actions('Test Project'),
+        });
+
+        const current_db = get(db);
+
+        expect(current_db.projects.at(0)).toEqual({
+            type: 1,
+            name: 'Test Project',
+            file_path: `${paths.project}/Test Project.md`,
+            parents: [
+                {
+                    file_path: `${paths.topic}/Topic1.md`,
+                    name: 'Topic1',
+                    parents: [],
+                    type: 2,
+                },
+            ],
+            children: [],
+            ...create_base_props_result(),
+        });
+
+        // topics.at(0) = Inbox
+        expect(current_db.topics.find((t) => t.name !== 'Inbox')).toEqual({
+            type: 2,
+            name: 'Topic1',
+            file_path: `${paths.topic}/Topic1.md`,
+            parents: [],
+            children: [
+                {
+                    type: 1,
+                    file_path: `${paths.project}/Test Project.md`,
+                },
+            ],
+            ...create_base_props_result(),
+        });
+
+        expect(create_file_mock).toHaveBeenCalledOnce();
+
+        expect(create_file_mock).toHaveBeenCalledWith(
+            `${paths.project}/Test Project.md`,
+            entry_header_file_content('project')
+        );
+
+        expect(write_metadata_mock).toHaveBeenCalledOnce();
+        expect(write_metadata_mock).toHaveBeenCalledWith(
+            `${paths.topic}/Topic1.md`,
+            { children: '1,Test Project' }
+        );
+    });
 });
