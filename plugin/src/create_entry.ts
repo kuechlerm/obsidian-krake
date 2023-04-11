@@ -10,6 +10,7 @@ import { get_collection } from './helper';
 import { get } from 'svelte/store';
 import type { Child } from './types';
 import { name_from_file_path } from './helper';
+import { entry_header_file_content } from './utils/file_content_inits';
 
 export async function create_entry_workflow(args: {
     line_no: number; // editor.getCursor().line
@@ -46,42 +47,7 @@ export async function create_entry_workflow(args: {
 
     // TOOD reicht normalizePath?
     const file_path = args.normalize_path(`${folder_name}/${clean_text}.md`);
-    const file_lines = ['', '```krake', 'type:entry-header', '```', ''];
-
-    if (args.type !== 'task') {
-        if (args.type === 'topic') {
-            file_lines.push(
-                ...[
-                    '#### Topics',
-                    '```krake',
-                    'type:topics',
-                    'children:true',
-                    '```',
-                    '',
-                    '#### Projects',
-                    '```krake',
-                    'type:projects',
-                    'children:true',
-                    '```',
-                    '',
-                ]
-            );
-        }
-
-        file_lines.push(
-            ...[
-                '#### Tasks',
-                '```krake',
-                'type:tasks',
-                'children:true',
-                '```',
-                '',
-            ]
-        );
-    }
-
-    file_lines.push('');
-    const file_content = file_lines.join('\n');
+    const file_content = entry_header_file_content(args.type);
 
     const new_child_file = await args.create_file(file_path, file_content);
 
