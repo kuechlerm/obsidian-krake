@@ -32,9 +32,7 @@ type DB_JSON = {
     tasks: Task_JSON[];
 };
 
-export async function migrate_db(app: App, skip = true) {
-    if (skip) return;
-
+export const migrate_db = (app: App) => async () => {
     const db_file = app.vault.getAbstractFileByPath('db.json') as TFile | null;
     if (!db_file) return;
 
@@ -51,8 +49,8 @@ export async function migrate_db(app: App, skip = true) {
         await migrate_entry(app, topic);
     }
 
-    // TODO set migration flag
-}
+    // TODO set migration flag?
+};
 
 async function migrate_entry(app: App, entry: Project_JSON | Topic_JSON) {
     const map_child_name = (child: Child) =>
