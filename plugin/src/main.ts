@@ -18,6 +18,8 @@ import type { Project } from './types';
 import type { Task } from './types';
 import type { Entry } from './types';
 import { migrate_db } from './migrate_db';
+import { change_path } from './change_path';
+import { write_metadata } from './obsidian/obsidian_helpers';
 
 // @ts-ignore
 const version = __version__;
@@ -98,10 +100,15 @@ export default class ObsidianKrakePlugin extends Plugin {
 
         this.registerEvent(
             this.app.vault.on('rename', (file, old_path) => {
-                if (!(file instanceof TFile)) return;
                 if (!old_path.startsWith(paths.base)) return;
+                if (!(file instanceof TFile)) return;
 
-                db.change_path(old_path, file.path, file.basename);
+                change_path(
+                    old_path,
+                    file.path,
+                    file.basename,
+                    write_metadata(this.app)
+                );
             })
         );
 

@@ -10,6 +10,7 @@ const empty_db = (): DB => ({
 });
 
 // TODO use on init if no Inbox-Topic exists
+// TODO fix parent -> children
 function inbox_content() {
     const lines = [
         '',
@@ -187,7 +188,7 @@ function create_db_store() {
         }
     };
 
-    const change_path = async (
+    const change_path = (
         old_path: string,
         new_path: string,
         new_name: string
@@ -200,6 +201,8 @@ function create_db_store() {
             .toLowerCase();
 
         if (!folder_name) return;
+
+        let updated_entry: Entry | undefined;
 
         store.update((curr) => {
             const collection = (curr as any)[folder_name] as Entry[];
@@ -233,6 +236,7 @@ function create_db_store() {
             // projects and topics have children
             if (folder_name !== paths.task.toLowerCase()) {
                 // update all levels of children
+
                 update_all_children(
                     curr,
                     old_path,
@@ -242,8 +246,12 @@ function create_db_store() {
                 );
             }
 
+            updated_entry = entry;
+
             return curr;
         });
+
+        return updated_entry;
     };
 
     const add_parent = async (
@@ -435,13 +443,12 @@ function update_all_children(
         const entry = get_collection(current_db, child.type).find(
             (e) => e.file_path === child.file_path
         );
-        if (!entry) throw new Error('No entry for file_path');
 
-        const parent = entry.parents.find((p) => p.file_path === old_path);
-        if (!parent) throw new Error('No parent for file_path');
+        if (!entry) {
+            throw new Error('No entry for file_path');
+        }
 
-        parent.file_path = new_path;
-        parent.name = new_name;
+        update_all_parents(entry, old_path, new_path, new_name);
 
         update_all_children(
             current_db,
@@ -451,6 +458,31 @@ function update_all_children(
             (entry as any).children
         );
     });
+}
+
+// parents: a -> b -> c
+function update_all_parents(
+    entry: { parents: Parent[] },
+    old_path: string,
+    new_path: string,
+    new_name: string
+) {
+    for (const parent of entry.parents) {
+        if (parent.file_path === old_path) {
+            parent.file_path = new_path;
+            parent.name = new_name;
+            // only one parent was changed
+            return;
+        }
+
+        if (parent.parents.length === 0) {
+            // no parents
+            return;
+        }
+
+        // nothing changed - go on
+        update_all_parents(parent, old_path, new_path, new_name);
+    }
 }
 
 function add_parent_to_all_children(
