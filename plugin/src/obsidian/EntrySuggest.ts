@@ -1,20 +1,20 @@
 import { App, FuzzySuggestModal, TFile, TFolder } from 'obsidian';
 import type { EntryType, Parent } from '../types';
-import { byStringProperty } from '../helper';
+import { byStringProperty, entry_type_to_folder_path } from '../helper';
 
 export class EntrySuggest extends FuzzySuggestModal<TFile> {
     constructor(
         app: App,
-        private folder: string,
-        private exclude_paths: string[],
         private type: EntryType,
+        private exclude_paths: string[],
         private use_selection: (entry: Omit<Parent, 'parents'>) => void
     ) {
         super(app);
     }
 
     getItems(): TFile[] {
-        const folder = this.app.vault.getAbstractFileByPath(this.folder);
+        const folder_path = entry_type_to_folder_path(this.type);
+        const folder = this.app.vault.getAbstractFileByPath(folder_path);
 
         if (!(folder instanceof TFolder)) {
             return [];

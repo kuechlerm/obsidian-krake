@@ -12,7 +12,6 @@ import EntryHeader from '../components/EntryHeader.svelte';
 import TasksList from '../components/TasksList.svelte';
 import ProjectsList from '../components/ProjectsList.svelte';
 import TopicsList from '../components/TopicsList.svelte';
-import { paths } from '../paths';
 import DailyHeader from '../components/DailyHeader.svelte';
 import { parse_config } from '../helper';
 
@@ -70,27 +69,14 @@ export const process_krake_codeblock =
                     move_file: (f, t) => move_file(app, f, t),
                     delete_file: delete_file(app),
                     write_metadata: write_metadata(app),
-                    suggest_project: (exclude_paths) => {
+
+                    suggest_parent: (parent_entry_type, exclude_paths) => {
                         return new Promise<Omit<Parent, 'parents'>>(
                             (resolve) => {
                                 new EntrySuggest(
                                     app,
-                                    paths.project,
+                                    parent_entry_type,
                                     exclude_paths,
-                                    1,
-                                    resolve
-                                ).open();
-                            }
-                        );
-                    },
-                    suggest_topic: (exclude_paths) => {
-                        return new Promise<Omit<Parent, 'parents'>>(
-                            (resolve) => {
-                                new EntrySuggest(
-                                    app,
-                                    paths.topic,
-                                    exclude_paths,
-                                    2,
                                     resolve
                                 ).open();
                             }

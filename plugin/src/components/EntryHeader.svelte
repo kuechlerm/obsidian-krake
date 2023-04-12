@@ -14,22 +14,17 @@
     import Flyout from './subcomponents/Flyout.svelte';
     import type { Entry, Parent, EntryType } from '../types';
     import { paths } from '../paths';
-    import {
-        days_ago_text,
-        get_collection,
-        name_from_file_path,
-    } from '../helper';
+    import { days_ago_text, get_collection } from '../helper';
     import { db } from '../stores/db';
     import { toggle_done_workflow } from '../workflows/toggle_done';
     import { delete_entry_workflow } from '../workflows/delete_entry';
+    import { add_parent_workflow } from '../workflows/add_parent';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
     export let open: (file_path: string) => void;
-    export let suggest_project: (
-        exclude_paths: string[]
-    ) => Promise<Omit<Parent, 'parents'>>;
-    export let suggest_topic: (
+    export let suggest_parent: (
+        parent_entry_type: EntryType,
         exclude_paths: string[]
     ) => Promise<Omit<Parent, 'parents'>>;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
@@ -82,28 +77,7 @@
     async function add_project_parent() {
         if (!entry) return;
 
-        const parent_info = await suggest_project(
-            entry.parents.map((p) => p.file_path)
-        );
-        await db.add_parent(entry, parent_info);
-
-        const parent = $db.projects.find(
-            (p) => p.file_path === parent_info.file_path
-        );
-
-        if (parent) {
-            const children = [
-                ...parent.children.map(
-                    (c) => `${c.type},${name_from_file_path(c.file_path)}`
-                ),
-            ]
-                .filter(Boolean)
-                .join(';');
-
-            await write_metadata(parent_info.file_path, {
-                children,
-            });
-        }
+        await add_parent_workflow(entry, 1, suggest_parent, write_metadata);
 
         actions_visible = false;
     }
@@ -111,28 +85,7 @@
     async function add_topic_parent() {
         if (!entry) return;
 
-        const parent_info = await suggest_topic(
-            entry.parents.map((p) => p.file_path)
-        );
-        await db.add_parent(entry, parent_info);
-
-        const parent = $db.topics.find(
-            (p) => p.file_path === parent_info.file_path
-        );
-
-        if (parent) {
-            const children = [
-                ...parent.children.map(
-                    (c) => `${c.type},${name_from_file_path(c.file_path)}`
-                ),
-            ]
-                .filter(Boolean)
-                .join(';');
-
-            await write_metadata(parent_info.file_path, {
-                children,
-            });
-        }
+        await add_parent_workflow(entry, 2, suggest_parent, write_metadata);
 
         actions_visible = false;
     }

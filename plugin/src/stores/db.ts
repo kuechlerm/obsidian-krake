@@ -258,6 +258,8 @@ function create_db_store() {
         entry: Entry,
         new_parent_info: Omit<Parent, 'parents'>
     ) => {
+        let updated_parent_entry: Entry | undefined;
+
         store.update((curr) => {
             const parent_entry = get_collection(
                 curr,
@@ -306,8 +308,12 @@ function create_db_store() {
                 (entry as any).children
             );
 
+            updated_parent_entry = parent_entry;
+
             return curr;
         });
+
+        return updated_parent_entry;
     };
 
     const remove_parent = async (entry: Entry, parent_to_remove: Parent) => {

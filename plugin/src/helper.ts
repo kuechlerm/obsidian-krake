@@ -109,3 +109,11 @@ export function path_to_collection(path: string): [EntryType, boolean] {
 
     throw new Error('Unkown path');
 }
+
+export function entry_type_to_folder_path(entry_type: EntryType) {
+    if (entry_type === 0) return paths.task;
+    if (entry_type === 1) return paths.project;
+    if (entry_type === 2) return paths.topic;
+
+    throw new Error('Not possible');
+}
