@@ -125,13 +125,19 @@ export default class ObsidianKrakePlugin extends Plugin {
         await migrate_db(this.app);
 
         const topics = await this.get_entries<Topic>(paths.topic);
+
         const projects = await this.get_entries<Project>(paths.project);
+        const done_projects = await this.get_entries<Project>(
+            paths.project_archive
+        );
+
         const tasks = await this.get_entries<Task>(paths.task);
+        const done_tasks = await this.get_entries<Task>(paths.task_archive);
 
         const init_db: DB = {
             topics,
-            projects,
-            tasks,
+            projects: [...projects, ...done_projects],
+            tasks: [...tasks, ...done_tasks],
         };
 
         db.init(init_db);

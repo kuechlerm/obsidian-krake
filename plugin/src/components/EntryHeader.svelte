@@ -21,6 +21,7 @@
     } from '../helper';
     import { db } from '../stores/db';
     import { toggle_done_workflow } from '../workflows/toggle_done';
+    import { delete_entry_workflow } from '../workflows/delete_entry';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -146,8 +147,7 @@
     async function delete_entry() {
         if (!entry) return;
 
-        await delete_file(entry.file_path);
-        await db.remove_entry(entry);
+        await delete_entry_workflow(entry, delete_file, write_metadata);
     }
 
     async function change_type(to: EntryType) {
