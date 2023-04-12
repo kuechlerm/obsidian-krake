@@ -18,7 +18,7 @@ import type { Project } from './types';
 import type { Task } from './types';
 import type { Entry } from './types';
 import { migrate_db } from './migrate_db';
-import { change_path } from './change_path';
+import { change_path } from './workflows/change_path';
 import { write_metadata } from './obsidian/obsidian_helpers';
 
 // @ts-ignore

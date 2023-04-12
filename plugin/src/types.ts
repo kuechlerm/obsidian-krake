@@ -1,17 +1,20 @@
 // - alle Parents werden an Entry gespeichert
 // - nur direkte Children wird an Entry gespeichert
 
+/** 0: task, 1: project, 2: topic */
+export type EntryType = 0 | 1 | 2;
+
 export type Parent = {
     parents: Parent[];
 
     name: string;
     file_path: string;
-    type: 0 | 1 | 2; // 0: task, 1: project, 2: topic
+    type: EntryType;
 };
 
 export type Child = {
     file_path: string;
-    type: 0 | 1 | 2; // 0: task, 1: project, 2: topic
+    type: EntryType;
 };
 
 // Topic / Project / Task -> für Struktur-Darstellung
@@ -20,7 +23,7 @@ export type Entry = {
 
     name: string; // TODO muss das einzigartig sein!?
     file_path: string; // kann als id dienen
-    type: 0 | 1 | 2; // 0: task, 1: project, 2: topic
+    type: EntryType;
     done?: Date;
     created: Date;
     last_review: Date;

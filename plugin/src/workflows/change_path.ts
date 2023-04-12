@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
-import { get_collection, name_from_file_path } from './helper';
-import { db } from './stores/db';
-import type { Child } from './types';
+import { get_collection, name_from_file_path } from '../helper';
+import { db } from '../stores/db';
+import type { Child } from '../types';
 
 export async function change_path(
     old_path: string,

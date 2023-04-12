@@ -1,10 +1,10 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { create_entry_workflow } from './create_entry';
-import { paths } from './paths';
+import { paths } from '../paths';
 import { get } from 'svelte/store';
-import { create_default_project, create_default_topic, db } from './stores/db';
+import { create_default_project, create_default_topic, db } from '../stores/db';
 import type { TFile } from 'obsidian';
-import { entry_header_file_content } from './utils/file_content_inits';
+import { entry_header_file_content } from '../utils/file_content_inits';
 
 const create_file_mock = vi.fn().mockImplementation(async () => ({} as TFile));
 

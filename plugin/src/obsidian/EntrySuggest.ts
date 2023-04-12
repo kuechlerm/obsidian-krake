@@ -1,5 +1,5 @@
 import { App, FuzzySuggestModal, TFile, TFolder } from 'obsidian';
-import type { Parent } from '../types';
+import type { EntryType, Parent } from '../types';
 import { byStringProperty } from '../helper';
 
 export class EntrySuggest extends FuzzySuggestModal<TFile> {
@@ -7,7 +7,7 @@ export class EntrySuggest extends FuzzySuggestModal<TFile> {
         app: App,
         private folder: string,
         private exclude_paths: string[],
-        private type: 0 | 1 | 2,
+        private type: EntryType,
         private use_selection: (entry: Omit<Parent, 'parents'>) => void
     ) {
         super(app);

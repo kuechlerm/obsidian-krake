@@ -12,7 +12,7 @@
     import IconButton from './subcomponents/IconButton.svelte';
     import Pen from './icons/Pen.svelte';
     import Flyout from './subcomponents/Flyout.svelte';
-    import type { Entry, Parent } from '../types';
+    import type { Entry, Parent, EntryType } from '../types';
     import { paths } from '../paths';
     import {
         days_ago_text,
@@ -20,6 +20,7 @@
         name_from_file_path,
     } from '../helper';
     import { db } from '../stores/db';
+    import { toggle_done_workflow } from '../workflows/toggle_done';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -39,7 +40,7 @@
 
     $: entry_type = (
         path.startsWith(paths.task) ? 0 : path.startsWith(paths.project) ? 1 : 2
-    ) as 0 | 1 | 2;
+    ) as EntryType;
     $: color = entry_type === 0 ? 'teal' : entry_type === 1 ? 'violet' : 'pink';
     $: entry = get_collection($db, entry_type).find(
         (t) => t.file_path === path
@@ -70,10 +71,7 @@
 
         const checked = (e.target as any).checked;
 
-        const old_path = entry.file_path;
-        db.toggle_done(entry, checked);
-        const new_path = entry.file_path;
-        await move_file(old_path, new_path);
+        await toggle_done_workflow(entry, checked, move_file);
     }
 
     function toggle_actions() {
@@ -152,10 +150,10 @@
         await db.remove_entry(entry);
     }
 
-    async function change_type(to: 0 | 1 | 2) {
+    async function change_type(to: EntryType) {
         if (!entry) return;
 
-        const map_path = (type: 0 | 1 | 2) =>
+        const map_path = (type: EntryType) =>
             type === 0 ? paths.task : type === 1 ? paths.project : paths.topic;
         const new_path = entry.file_path.replace(
             map_path(entry.type),

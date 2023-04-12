@@ -5,9 +5,9 @@ import {
     create_default_task,
     create_default_topic,
     db,
-} from './stores/db';
+} from '../stores/db';
 import { change_path } from './change_path';
-import { paths } from './paths';
+import { paths } from '../paths';
 
 describe('change_path', () => {
     afterEach(() => {

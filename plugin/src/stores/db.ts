@@ -1,7 +1,16 @@
 import { writable } from 'svelte/store';
-import type { Child, DB, Entry, Parent, Project, Task, Topic } from '../types';
+import type {
+    Child,
+    DB,
+    Entry,
+    Parent,
+    Project,
+    Task,
+    Topic,
+    EntryType,
+} from '../types';
 import { paths } from '../paths';
-import { get_collection } from '../helper';
+import { get_collection, path_to_collection } from '../helper';
 
 const empty_db = (): DB => ({
     topics: [],
@@ -133,7 +142,7 @@ function create_db_store() {
 
             const collection = get_collection(
                 db,
-                parseInt(child_type) as 0 | 1 | 2
+                parseInt(child_type) as EntryType
             );
 
             const child = collection.find((c) => c.name === child_name);
@@ -177,14 +186,14 @@ function create_db_store() {
                 entry.type === 0 ? paths.task_archive : paths.project_archive;
             const new_path = entry.file_path.replace(old_folder, new_folder);
 
-            change_path(entry.file_path, new_path, entry.name);
+            return change_path(entry.file_path, new_path, entry.name);
         } else {
             const old_folder =
                 entry.type === 0 ? paths.task_archive : paths.project_archive;
             const new_folder = entry.type === 0 ? paths.task : paths.project;
             const new_path = entry.file_path.replace(old_folder, new_folder);
 
-            change_path(entry.file_path, new_path, entry.name);
+            return change_path(entry.file_path, new_path, entry.name);
         }
     };
 
@@ -193,19 +202,12 @@ function create_db_store() {
         new_path: string,
         new_name: string
     ) => {
-        // TODO anders lösen?
-        const folder_name = old_path
-            .split('/')
-            .at(1)
-            ?.replace(' Archive', '')
-            .toLowerCase();
-
-        if (!folder_name) return;
+        const [entry_type] = path_to_collection(old_path);
 
         let updated_entry: Entry | undefined;
 
         store.update((curr) => {
-            const collection = (curr as any)[folder_name] as Entry[];
+            const collection = get_collection(curr, entry_type);
             const entry = collection.find((e) => e.file_path === old_path);
 
             if (!entry) return curr;
@@ -234,9 +236,7 @@ function create_db_store() {
             });
 
             // projects and topics have children
-            if (folder_name !== paths.task.toLowerCase()) {
-                // update all levels of children
-
+            if (entry_type > 0) {
                 update_all_children(
                     curr,
                     old_path,
@@ -380,7 +380,7 @@ function create_db_store() {
 
     const change_type = async (
         entry: Entry,
-        new_type: 0 | 1 | 2,
+        new_type: EntryType,
         new_path: string
     ) => {
         store.update((curr) => {

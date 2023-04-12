@@ -6,7 +6,7 @@ import {
     type MarkdownView,
 } from 'obsidian';
 import { open_file, write_metadata } from './obsidian_helpers';
-import { create_entry_workflow } from '../create_entry';
+import { create_entry_workflow } from '../workflows/create_entry';
 
 export const create_entry =
     (app: App, type: 'task' | 'project' | 'topic') =>

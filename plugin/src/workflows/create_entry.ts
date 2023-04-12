@@ -1,16 +1,16 @@
 import { type TFile } from 'obsidian';
-import { paths } from './paths';
+import { paths } from '../paths';
 import {
     create_default_project,
     create_default_task,
     create_default_topic,
     db,
-} from './stores/db';
-import { get_collection } from './helper';
+} from '../stores/db';
+import { get_collection } from '../helper';
 import { get } from 'svelte/store';
-import type { Child } from './types';
-import { name_from_file_path } from './helper';
-import { entry_header_file_content } from './utils/file_content_inits';
+import type { Child, EntryType } from '../types';
+import { name_from_file_path } from '../helper';
+import { entry_header_file_content } from '../utils/file_content_inits';
 
 export async function create_entry_workflow(args: {
     line_no: number; // editor.getCursor().line
@@ -53,7 +53,7 @@ export async function create_entry_workflow(args: {
 
     // TODO extract
 
-    let current_file_entry_type: 0 | 1 | 2 = 0; // 0 = any file, not a project or topic
+    let current_file_entry_type: EntryType = 0; // 0 = any file, not a project or topic
 
     if (args.type === 'task') {
         const new_task = create_default_task({
@@ -62,7 +62,7 @@ export async function create_entry_workflow(args: {
         });
         await db.add_task(new_task);
 
-        let parent_type: 0 | 1 | 2 = 0;
+        let parent_type: EntryType = 0;
         if (args.current_file_path.startsWith(paths.project)) {
             parent_type = 1;
         }
@@ -90,7 +90,7 @@ export async function create_entry_workflow(args: {
         });
         await db.add_project(new_project);
 
-        let parent_type: 0 | 1 | 2 = 0;
+        let parent_type: EntryType = 0;
         if (
             args.current_file_path.startsWith(paths.topic) &&
             !args.current_file_path.endsWith('Inbox.md')
@@ -116,7 +116,7 @@ export async function create_entry_workflow(args: {
         });
         await db.add_topic(new_topic);
 
-        let parent_type: 0 | 1 | 2 = 0;
+        let parent_type: EntryType = 0;
         if (
             args.current_file_path.startsWith(paths.topic) &&
             !args.current_file_path.endsWith('Inbox.md')

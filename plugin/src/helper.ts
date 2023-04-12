@@ -6,7 +6,8 @@ import {
     isSameDay,
     parse,
 } from 'date-fns';
-import type { DB, Entry } from './types';
+import type { DB, Entry, EntryType } from './types';
+import { paths } from './paths';
 
 export const create_date_filter = (config: string) => {
     let clean_config = config.replaceAll(' ', '');
@@ -64,7 +65,7 @@ export const days_ago_text = (date: Date) => {
     return `${Math.abs(diff)}d ago`;
 };
 
-export function get_collection(db: DB, entry_type: 0 | 1 | 2): Entry[] {
+export function get_collection(db: DB, entry_type: EntryType): Entry[] {
     if (entry_type === 0) return db.tasks;
     if (entry_type === 1) return db.projects;
     if (entry_type === 2) return db.topics;
@@ -95,4 +96,16 @@ export function parse_config(source: string, file_path: string) {
     config.file_path = file_path;
 
     return config;
+}
+
+export function path_to_collection(path: string): [EntryType, boolean] {
+    if (path.startsWith(paths.task)) return [0, false];
+    if (path.startsWith(paths.project)) return [1, false];
+    if (path.startsWith(paths.topic)) return [2, false];
+
+    if (path.startsWith(paths.task_archive)) return [0, true];
+    if (path.startsWith(paths.project_archive)) return [1, true];
+    if (path.startsWith(paths.topic_archive)) return [2, true];
+
+    throw new Error('Unkown path');
 }
