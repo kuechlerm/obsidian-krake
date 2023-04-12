@@ -33,6 +33,7 @@
             <div
                 class="flex gap-1 items-center justify-between p-2 border border-solid rounded-lg border-pink-600 bg-pink-600/10 cursor-pointer"
                 class:selected={topic.file_path === selected_entry?.file_path}
+                class:inbox={topic.name === 'Inbox'}
                 on:click={() => (selected_entry = topic)}
                 on:keyup
                 on:dragstart={drag_start(topic)}
@@ -71,5 +72,9 @@
 <style lang="postcss">
     .selected {
         @apply bg-pink-600/50;
+    }
+
+    .inbox {
+        @apply bg-blue-600/20 border-blue-600;
     }
 </style>

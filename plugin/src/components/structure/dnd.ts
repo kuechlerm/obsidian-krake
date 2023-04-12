@@ -22,7 +22,6 @@ export const drop =
 
         // TODO if entry has more than one parent, remove on the parent that the user is dragging from
         if (dragging.parents.length > 1) return;
-        console.log('PING', { dragging, entry });
 
         const parent = dragging.parents.at(0);
         if (parent) await db.remove_parent(dragging, parent);
