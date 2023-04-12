@@ -48,10 +48,12 @@
     async function save() {
         if (!entry) return;
 
+        // TODO is this necessary?
         if (entry_type === 0) $db.tasks = $db.tasks;
         if (entry_type === 1) $db.projects = $db.projects;
         if (entry_type === 2) $db.topics = $db.topics;
 
+        // TODO extract to workflow
         const metadata: any = {};
         if (entry.do_date)
             metadata['do_date'] = entry.do_date.getTime().toString();

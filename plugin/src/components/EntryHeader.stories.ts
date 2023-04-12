@@ -21,10 +21,7 @@ export const Task_Header: Story = {
     args: {
         path: `${paths.task}/Test1.md`,
         open: () => console.log('open'),
-        suggest_project: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        suggest_topic: async () => {
+        suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
         },
         move_file: async () => console.log('move_file'),
@@ -49,10 +46,7 @@ export const Project_Header: Story = {
     args: {
         path: `${paths.project}/Test1.md`,
         open: () => console.log('open'),
-        suggest_project: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        suggest_topic: async () => {
+        suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
         },
         move_file: async () => console.log('move_file'),
@@ -77,12 +71,10 @@ export const Topic_Header: Story = {
     args: {
         path: `${paths.topic}/Test1.md`,
         open: () => console.log('open'),
-        suggest_project: async () => {
+        suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
         },
-        suggest_topic: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
+
         move_file: async () => console.log('move_file'),
         delete_file: async () => console.log('delete_file'),
         write_metadata: async () => console.log('write_metadata'),

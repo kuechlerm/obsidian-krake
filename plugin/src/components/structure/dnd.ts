@@ -14,14 +14,15 @@ export const drag_start = (entry: Entry) => (e: Event) => {
 
 export const drop =
     (entry: Entry, dragging: Entry | null) => async (e: Event) => {
-        // console.log('drop', { entry, dragging });
         if (!dragging) return;
         dragging_entry.set(null);
 
         const element = e.target as HTMLElement;
         element.classList.remove('dragging');
 
-        if (entry.parents.length > 1) return;
+        // TODO if entry has more than one parent, remove on the parent that the user is dragging from
+        if (dragging.parents.length > 1) return;
+        console.log('PING', { dragging, entry });
 
         const parent = dragging.parents.at(0);
         if (parent) await db.remove_parent(dragging, parent);
