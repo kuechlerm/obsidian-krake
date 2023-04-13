@@ -9,6 +9,7 @@
     import Flag from './icons/Flag.svelte';
     import Inbox from './icons/Inbox.svelte';
     import Folder from './icons/Folder.svelte';
+    import { change_date_workflow } from 'src/workflows/change_date';
 
     // better type checking for do_date and due_date
     export let entry: Task | Project | Topic;
@@ -22,22 +23,8 @@
 
     $: color = entry.type === 0 ? 'teal' : entry.type === 1 ? 'violet' : 'pink';
 
-    async function save() {
-        // TODO extract to workflow
-
-        // TODO is this necessary?
-        if (entry.type === 0) $db.tasks = $db.tasks;
-        if (entry.type === 1) $db.projects = $db.projects;
-        if (entry.type === 2) $db.topics = $db.topics;
-
-        const metadata: any = {};
-        if (entry.type === 0 && entry.do_date)
-            metadata['do_date'] = entry.do_date.getTime().toString();
-        if (entry.type !== 2 && entry.due_date)
-            metadata['due_date'] = entry.due_date.getTime().toString();
-
-        // TODO fires 3 times!?
-        await write_metadata(entry.file_path, metadata);
+    async function change_date() {
+        await change_date_workflow(entry, write_metadata);
     }
 
     async function toggle_done(e: Event) {
@@ -79,13 +66,16 @@
 
         <div class="flex items-center gap-1">
             {#if entry.type === 0}
-                <DateIndicator bind:date={entry.do_date} on:changed={save} />
+                <DateIndicator
+                    bind:date={entry.do_date}
+                    on:changed={change_date}
+                />
             {/if}
             {#if entry.type !== 2}
                 <DateIndicator
                     due
                     bind:date={entry.due_date}
-                    on:changed={save}
+                    on:changed={change_date}
                 />
             {/if}
 

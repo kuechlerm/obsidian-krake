@@ -68,6 +68,7 @@ export type EntryFileRepresentation = {
 
 // ----------------------------------------------------------------
 
+// TODO remove after removal of Lists
 export type TaskBlockConfig = {
     type: 'tasks';
     done?: 'true' | 'false' | string; // string : "=dd.MM.yyyy" => not done + done that day
@@ -93,3 +94,10 @@ export type TopicBlockConfig = {
     file_path: string;
     children?: 'true';
 };
+
+// ----------------------------------------------------------------
+
+export type Write_Metadata = (
+    file_path: string,
+    metadata: { [key: string]: string }
+) => Promise<void>;

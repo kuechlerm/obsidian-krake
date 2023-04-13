@@ -12,7 +12,14 @@
     import IconButton from './subcomponents/IconButton.svelte';
     import Pen from './icons/Pen.svelte';
     import Flyout from './subcomponents/Flyout.svelte';
-    import type { Entry, Parent, EntryType } from '../types';
+    import type {
+        Task,
+        Project,
+        Topic,
+        Parent,
+        EntryType,
+        Write_Metadata,
+    } from '../types';
     import { paths } from '../paths';
     import { days_ago_text, get_collection } from '../helper';
     import { db } from '../stores/db';
@@ -21,6 +28,7 @@
     import { add_parent_workflow } from '../workflows/add_parent';
     import Inbox from './icons/Inbox.svelte';
     import ListEntry from './ListEntry.svelte';
+    import { change_date_workflow } from '../workflows/change_date';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -31,19 +39,18 @@
     ) => Promise<Omit<Parent, 'parents'>>;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
     export let delete_file: (file_path: string) => Promise<void>;
-    export let write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void>;
+    export let write_metadata: Write_Metadata;
 
     // TODO path_to_collection?
     $: entry_type = (
         path.startsWith(paths.task) ? 0 : path.startsWith(paths.project) ? 1 : 2
     ) as EntryType;
-    $: color = entry_type === 0 ? 'teal' : entry_type === 1 ? 'violet' : 'pink';
+
     $: entry = get_collection($db, entry_type).find(
         (t) => t.file_path === path
-    ) as (Entry & { do_date?: Date; due_date?: Date }) | undefined;
+    ) as Task | Project | Topic | undefined;
+
+    $: color = entry_type === 0 ? 'teal' : entry_type === 1 ? 'violet' : 'pink';
 
     $: filered_topics =
         entry_type > 1
@@ -67,23 +74,10 @@
     let actions_visible = false;
     let show_entry_picker = false;
 
-    async function save() {
+    async function change_date() {
         if (!entry) return;
 
-        // TODO is this necessary?
-        if (entry_type === 0) $db.tasks = $db.tasks;
-        if (entry_type === 1) $db.projects = $db.projects;
-        if (entry_type === 2) $db.topics = $db.topics;
-
-        // TODO extract to workflow
-        const metadata: any = {};
-        if (entry.do_date)
-            metadata['do_date'] = entry.do_date.getTime().toString();
-        if (entry.due_date)
-            metadata['due_date'] = entry.due_date.getTime().toString();
-
-        // TODO fires 3 times!?
-        await write_metadata(entry.file_path, metadata);
+        change_date_workflow(entry, write_metadata);
     }
 
     async function toggle_done(e: Event) {
@@ -199,17 +193,18 @@
                             {days_ago_text(entry.last_review)}
                         </div>
 
-                        {#if entry_type === 0}
+                        {#if entry.type === 0}
                             <DateIndicator
                                 bind:date={entry.do_date}
-                                on:changed={save}
+                                on:changed={change_date}
                             />
                         {/if}
-                        {#if entry_type !== 2}
+
+                        {#if entry.type !== 2}
                             <DateIndicator
                                 due
                                 bind:date={entry.due_date}
-                                on:changed={save}
+                                on:changed={change_date}
                             />
                         {/if}
 
