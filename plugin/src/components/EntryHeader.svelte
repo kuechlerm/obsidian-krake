@@ -19,6 +19,8 @@
     import { toggle_done_workflow } from '../workflows/toggle_done';
     import { delete_entry_workflow } from '../workflows/delete_entry';
     import { add_parent_workflow } from '../workflows/add_parent';
+    import Inbox from './icons/Inbox.svelte';
+    import ListEntry from './ListEntry.svelte';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -34,6 +36,7 @@
         metadata: { [key: string]: string }
     ) => Promise<void>;
 
+    // TODO path_to_collection?
     $: entry_type = (
         path.startsWith(paths.task) ? 0 : path.startsWith(paths.project) ? 1 : 2
     ) as EntryType;
@@ -41,6 +44,25 @@
     $: entry = get_collection($db, entry_type).find(
         (t) => t.file_path === path
     ) as (Entry & { do_date?: Date; due_date?: Date }) | undefined;
+
+    $: filered_topics =
+        entry_type > 1
+            ? $db.topics.filter((topic) =>
+                  topic.parents.some((p) => p.file_path === path)
+              )
+            : null;
+    $: filered_projects =
+        entry_type > 1
+            ? $db.projects.filter((project) =>
+                  project.parents.some((p) => p.file_path === path)
+              )
+            : null;
+    $: filered_tasks =
+        entry_type > 0
+            ? $db.tasks.filter((task) =>
+                  task.parents.some((p) => p.file_path === path)
+              )
+            : null;
 
     let actions_visible = false;
     let show_entry_picker = false;
@@ -124,21 +146,29 @@
 <!-- need this frame to simulate the code-block in obsidian  -->
 <div class="p-2 overflow-hidden">
     <div
-        class="rounded-lg overflow-hidden pr-2 bg-slate-400 bg-opacity-10 border border-solid border-{color}-600 space-y-2 mt-4 shadow-md"
+        class="rounded-lg overflow-hidden pr-2 bg-slate-300 bg-opacity-10 border border-solid border-slate-600 border-opacity-30 space-y-2 mt-4 shadow-md"
     >
         {#if entry}
             <div class="flex gap-2">
-                <div class="bg-{color}-600 bg-opacity-70 h-auto w-3" />
+                <div
+                    class="w-10 px-2.5 flex items-center bg-{color}-600 bg-opacity-70 h-auto rounded-br-lg"
+                >
+                    {#if entry.type === 0}
+                        <Checkbox
+                            checked={!!entry.done}
+                            on:change={toggle_done}
+                        />
+                    {:else if entry.type === 1}
+                        <Flag classes="text-white" />
+                    {:else if entry.name === 'Inbox'}
+                        <Inbox classes="text-white" />
+                    {:else}
+                        <Folder classes="text-white" />
+                    {/if}
+                </div>
 
                 <div class="flex-1 py-2 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        {#if entry_type !== 2}
-                            <Checkbox
-                                checked={!!entry.done}
-                                on:change={toggle_done}
-                            />
-                        {/if}
-
+                    <div class="">
                         <Path
                             parents={entry.parents}
                             {open}
@@ -256,6 +286,47 @@
                     </IconButton>
                 </div>
             {/if}
+
+            <div class="p-4 space-y-4">
+                {#if filered_topics}
+                    <div class="space-y-2">
+                        {#each filered_topics as topic (topic.file_path)}
+                            <ListEntry
+                                entry={topic}
+                                {open}
+                                {move_file}
+                                {write_metadata}
+                            />
+                        {/each}
+                    </div>
+                {/if}
+
+                {#if filered_projects}
+                    <div class="space-y-2">
+                        {#each filered_projects as project (project.file_path)}
+                            <ListEntry
+                                entry={project}
+                                {open}
+                                {move_file}
+                                {write_metadata}
+                            />
+                        {/each}
+                    </div>
+                {/if}
+
+                {#if filered_tasks}
+                    <div class="space-y-2">
+                        {#each filered_tasks as task (task.file_path)}
+                            <ListEntry
+                                entry={task}
+                                {open}
+                                {move_file}
+                                {write_metadata}
+                            />
+                        {/each}
+                    </div>
+                {/if}
+            </div>
         {:else}
             Error. Entry not found.
         {/if}

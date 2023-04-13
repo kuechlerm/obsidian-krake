@@ -2,11 +2,9 @@
     import { db } from '../../stores/db';
     import { byStringProperty } from '../../helper';
     import type { Child, Entry, Topic } from '../../types';
-    import Folder from '../icons/Folder.svelte';
-    import Inbox from '../icons/Inbox.svelte';
-    import Open from '../icons/Open.svelte';
     import Column from './Column.svelte';
     import { dragging_entry, drop, drag_over, drag_start } from './dnd';
+    import OverviewEntry from './OverviewEntry.svelte';
 
     export let open: (file_path: string) => void;
     export let move_file: (from_path: string, to_path: string) => Promise<void>;
@@ -27,37 +25,22 @@
 
 <div class="flex gap-4 align-stretch">
     <div
-        class="flex flex-col gap-2 border border-solid p-2 rounded-lg bg-neutral-100"
+        class="flex flex-col gap-2 border border-solid border-slate-600/20 p-3 rounded-lg"
     >
         {#each first_level_topics as topic}
             <div
-                class="flex gap-1 items-center justify-between p-2 border border-solid rounded-lg border-pink-600 bg-pink-600/10 cursor-pointer"
-                class:selected={topic.file_path === selected_entry?.file_path}
-                class:inbox={topic.name === 'Inbox'}
                 on:click={() => (selected_entry = topic)}
                 on:keyup
                 on:dragstart={drag_start(topic)}
                 on:drop={drop(topic, $dragging_entry)}
                 on:dragover={drag_over(topic, $dragging_entry)}
             >
-                <div class="flex items-center gap-1">
-                    <div class="w-5 flex items-center">
-                        {#if topic.name === 'Inbox'}
-                            <Inbox />
-                        {:else}
-                            <Folder />
-                        {/if}
-                    </div>
-                    {topic.name}
-                </div>
-
-                <div
-                    on:click={() => open(topic.file_path)}
-                    on:keyup
-                    class="w-5 flex items-center cursor-pointer"
-                >
-                    <Open />
-                </div>
+                <OverviewEntry
+                    entry={topic}
+                    {open}
+                    {move_file}
+                    selected={topic.file_path === selected_entry?.file_path}
+                />
             </div>
         {/each}
     </div>
@@ -68,13 +51,3 @@
         {/key}
     {/if}
 </div>
-
-<style lang="postcss">
-    .selected {
-        @apply bg-pink-600/50;
-    }
-
-    .inbox {
-        @apply bg-blue-600/20 border-blue-600;
-    }
-</style>

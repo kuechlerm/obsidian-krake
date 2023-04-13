@@ -17,9 +17,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Task_Header: Story = {
+const create_task = (index: number) =>
+    create_default_task({
+        name: `Task${index}`,
+        file_path: `${paths.task}/Task${index}.md`,
+    });
+
+const create_project = (index: number) =>
+    create_default_project({
+        name: `Project${index}`,
+        file_path: `${paths.project}/Project${index}.md`,
+    });
+
+export const Empty_Task_Header: Story = {
     args: {
-        path: `${paths.task}/Test1.md`,
+        path: `${paths.task}/Task1.md`,
         open: () => console.log('open'),
         suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
@@ -28,23 +40,20 @@ export const Task_Header: Story = {
         delete_file: async () => console.log('delete_file'),
         write_metadata: async () => console.log('write_metadata'),
     },
-    play: () => {
+    play: async () => {
+        const task = create_task(1);
+
         db.init({
-            tasks: [
-                create_default_task({
-                    name: 'Test1',
-                    file_path: `${paths.task}/Test1.md`,
-                }),
-            ],
+            tasks: [task],
             projects: [],
             topics: [],
         });
     },
 };
 
-export const Project_Header: Story = {
+export const Empty_Project_Header: Story = {
     args: {
-        path: `${paths.project}/Test1.md`,
+        path: `${paths.project}/Project1.md`,
         open: () => console.log('open'),
         suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
@@ -53,42 +62,131 @@ export const Project_Header: Story = {
         delete_file: async () => console.log('delete_file'),
         write_metadata: async () => console.log('write_metadata'),
     },
-    play: () => {
+    play: async () => {
+        const project = create_project(1);
+
         db.init({
             tasks: [],
-            projects: [
-                create_default_project({
-                    name: 'Test1',
-                    file_path: `${paths.project}/Test1.md`,
-                }),
-            ],
+            projects: [project],
             topics: [],
         });
     },
 };
 
-export const Topic_Header: Story = {
+export const Empty_Topic_Header: Story = {
     args: {
-        path: `${paths.topic}/Test1.md`,
+        path: `${paths.topic}/Topic1.md`,
         open: () => console.log('open'),
         suggest_parent: async () => {
             return { type: 0, name: 'TODO', file_path: 'TODO' };
         },
-
         move_file: async () => console.log('move_file'),
         delete_file: async () => console.log('delete_file'),
         write_metadata: async () => console.log('write_metadata'),
     },
-    play: () => {
+    play: async () => {
+        const topic = create_default_topic({
+            name: 'Topic1',
+            file_path: `${paths.topic}/Topic1.md`,
+        });
+
         db.init({
             tasks: [],
             projects: [],
-            topics: [
-                create_default_topic({
-                    name: 'Test1',
-                    file_path: `${paths.topic}/Test1.md`,
-                }),
-            ],
+            topics: [topic],
         });
+    },
+};
+
+export const Task_Header_with_one_parent: Story = {
+    args: {
+        path: `${paths.task}/Task1.md`,
+        open: () => console.log('open'),
+        suggest_parent: async () => {
+            return { type: 0, name: 'TODO', file_path: 'TODO' };
+        },
+        move_file: async () => console.log('move_file'),
+        delete_file: async () => console.log('delete_file'),
+        write_metadata: async () => console.log('write_metadata'),
+    },
+    play: async () => {
+        const task = create_task(1);
+        const project = create_project(1);
+
+        db.init({
+            tasks: [task],
+            projects: [project],
+            topics: [],
+        });
+
+        await db.add_parent(task, project);
+    },
+};
+
+export const Project_Header_with_Tasks: Story = {
+    args: {
+        path: `${paths.project}/Project1.md`,
+        open: () => console.log('open'),
+        suggest_parent: async () => {
+            return { type: 0, name: 'TODO', file_path: 'TODO' };
+        },
+        move_file: async () => console.log('move_file'),
+        delete_file: async () => console.log('delete_file'),
+        write_metadata: async () => console.log('write_metadata'),
+    },
+    play: async () => {
+        const task1 = create_task(1);
+        const task2 = create_task(2);
+        const task3 = create_task(3);
+
+        const project = create_project(1);
+
+        db.init({
+            tasks: [task1, task2, task3],
+            projects: [project],
+            topics: [],
+        });
+
+        await db.add_parent(task1, project);
+        await db.add_parent(task2, project);
+        await db.add_parent(task3, project);
+    },
+};
+
+export const Topic_Header_with_Projects_and_Tasks: Story = {
+    args: {
+        path: `${paths.topic}/Topic1.md`,
+        open: () => console.log('open'),
+        suggest_parent: async () => {
+            return { type: 0, name: 'TODO', file_path: 'TODO' };
+        },
+        move_file: async () => console.log('move_file'),
+        delete_file: async () => console.log('delete_file'),
+        write_metadata: async () => console.log('write_metadata'),
+    },
+    play: async () => {
+        const task1 = create_task(1);
+        const task2 = create_task(2);
+        const task3 = create_task(3);
+
+        const project1 = create_project(1);
+        const project2 = create_project(2);
+
+        const topic = create_default_topic({
+            name: 'Topic1',
+            file_path: `${paths.topic}/Topic1.md`,
+        });
+
+        db.init({
+            tasks: [task1, task2, task3],
+            projects: [project1, project2],
+            topics: [topic],
+        });
+
+        await db.add_parent(task1, topic);
+        await db.add_parent(task2, topic);
+        await db.add_parent(task3, topic);
+        await db.add_parent(project1, topic);
+        await db.add_parent(project2, topic);
     },
 };
