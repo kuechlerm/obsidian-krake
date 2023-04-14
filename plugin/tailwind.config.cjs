@@ -14,6 +14,8 @@ const config = {
         'bg-sky-600',
         'border-violet-600',
         'bg-violet-600',
+        'bg-teal-600',
+        'bg-pink-600',
     ],
 
     plugins: [require('@tailwindcss/forms')],

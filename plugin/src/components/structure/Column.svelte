@@ -2,13 +2,13 @@
     import { db } from '../../stores/db';
     import { byStringProperty, get_collection } from '../../helper';
     import { paths } from '../../paths';
-    import type { Child, Entry } from '../../types';
+    import type { Child, Entry, Move_File, Open_File } from '../../types';
     import { dragging_entry, drop, drag_over, drag_start } from './dnd';
     import OverviewEntry from './OverviewEntry.svelte';
 
     export let parent_entry: Entry & { children: Child[] };
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
 
     $: children = (parent_entry?.children ?? [])
         .map((c) =>

@@ -11,7 +11,16 @@ import {
 const meta = {
     title: 'Components/EntryHeader',
     component: EntryHeader,
-    tags: ['autodocs'],
+    tags: [''],
+    args: {
+        open: async () => console.log('open'),
+        move_file: async () => console.log('move_file'),
+        delete_file: async () => console.log('delete_file'),
+        write_metadata: async () => console.log('write_metadata'),
+        suggest_parent: async () => {
+            return { type: 0, name: 'TODO', file_path: 'TODO' };
+        },
+    },
 } satisfies Meta<EntryHeader>;
 
 export default meta;
@@ -32,13 +41,6 @@ const create_project = (index: number) =>
 export const Empty_Task_Header: Story = {
     args: {
         path: `${paths.task}/Task1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const task = create_task(1);
@@ -54,13 +56,6 @@ export const Empty_Task_Header: Story = {
 export const Empty_Project_Header: Story = {
     args: {
         path: `${paths.project}/Project1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const project = create_project(1);
@@ -76,13 +71,6 @@ export const Empty_Project_Header: Story = {
 export const Empty_Topic_Header: Story = {
     args: {
         path: `${paths.topic}/Topic1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const topic = create_default_topic({
@@ -101,13 +89,6 @@ export const Empty_Topic_Header: Story = {
 export const Task_Header_with_one_parent: Story = {
     args: {
         path: `${paths.task}/Task1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const task = create_task(1);
@@ -126,13 +107,6 @@ export const Task_Header_with_one_parent: Story = {
 export const Project_Header_with_Tasks: Story = {
     args: {
         path: `${paths.project}/Project1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const task1 = create_task(1);
@@ -156,13 +130,6 @@ export const Project_Header_with_Tasks: Story = {
 export const Topic_Header_with_Projects_and_Tasks: Story = {
     args: {
         path: `${paths.topic}/Topic1.md`,
-        open: () => console.log('open'),
-        suggest_parent: async () => {
-            return { type: 0, name: 'TODO', file_path: 'TODO' };
-        },
-        move_file: async () => console.log('move_file'),
-        delete_file: async () => console.log('delete_file'),
-        write_metadata: async () => console.log('write_metadata'),
     },
     play: async () => {
         const task1 = create_task(1);

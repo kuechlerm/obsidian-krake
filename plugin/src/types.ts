@@ -101,3 +101,14 @@ export type Write_Metadata = (
     file_path: string,
     metadata: { [key: string]: string }
 ) => Promise<void>;
+
+export type Move_File = (from_path: string, to_path: string) => Promise<void>;
+
+export type Open_File = (file_path: string) => Promise<void>;
+
+export type Delete_File = (file_path: string) => Promise<void>;
+
+export type Suggest_Parent = (
+    parent_entry_type: EntryType,
+    exclude_paths: string[]
+) => Promise<Omit<Parent, 'parents'>>;

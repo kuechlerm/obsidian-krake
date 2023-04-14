@@ -14,7 +14,7 @@ const meta = {
             name: 'Topic1',
             file_path: 'topics/Topic1.md',
         }),
-        open: () => console.log('open'),
+        open: async () => console.log('open'),
         move_file: async () => console.log('move_file'),
         selected: false,
     },

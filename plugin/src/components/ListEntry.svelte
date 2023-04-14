@@ -1,6 +1,12 @@
 <script lang="ts">
-    import { db } from '../stores/db';
-    import type { Task, Project, Topic } from '../types';
+    import type {
+        Task,
+        Project,
+        Topic,
+        Write_Metadata,
+        Open_File,
+        Move_File,
+    } from '../types';
     import Checkbox from './subcomponents/Checkbox.svelte';
     import DateIndicator from './subcomponents/DateIndicator.svelte';
     import Open from './icons/Open.svelte';
@@ -9,19 +15,17 @@
     import Flag from './icons/Flag.svelte';
     import Inbox from './icons/Inbox.svelte';
     import Folder from './icons/Folder.svelte';
-    import { change_date_workflow } from 'src/workflows/change_date';
+    import { change_date_workflow } from '../workflows/change_date';
 
     // better type checking for do_date and due_date
     export let entry: Task | Project | Topic;
 
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
-    export let write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
 
-    $: color = entry.type === 0 ? 'teal' : entry.type === 1 ? 'violet' : 'pink';
+    $: color =
+        entry.type === 0 ? 'teal' : entry?.type === 1 ? 'violet' : 'pink';
 
     async function change_date() {
         await change_date_workflow(entry, write_metadata);
@@ -35,11 +39,11 @@
 </script>
 
 <div
-    class="flex text-neutral-900 cursor-pointer shadow-md rounded-lg overflow-hidden"
+    class="flex text-neutral-900 shadow-md rounded-lg rounded-r-sm overflow-hidden"
 >
     <div
         class="w-7 px-1.5 flex items-center bg-{color}-600 bg-opacity-70 h-auto rounded-l-lg
-                border border-solid border-{color}-600 border-opacity-0"
+                border-0"
     >
         {#if entry.type === 0}
             <Checkbox checked={!!entry.done} on:change={toggle_done} />
@@ -52,21 +56,33 @@
         {/if}
     </div>
 
-    <div
-        class="flex-1 flex gap-2 border border-l-0 bg-slate-300 bg-opacity-10 rounded-r-lg
-                border-solid border-slate-600 border-opacity-30"
-    >
-        <div class="flex-1 px-3 py-2 flex flex-col gap-0.5">
-            <div>
-                {entry.name}
-            </div>
+    <div class="flex-1 flex relative">
+        {#if entry.done}
+            <div
+                class="absolute inset-0 flex items-center bg-neutral-100/70 rounded-lg px-2 py-4"
+            />
+        {/if}
 
-            <Path parents={entry.parents} {open} size="s" />
+        <div
+            class="flex-1 flex gap-2 border border-l-0 border-r-0 bg-slate-300 bg-opacity-10
+                border-solid border-slate-600 border-opacity-30"
+        >
+            <div class="flex-1 px-3 py-2 flex flex-col gap-0.5">
+                <div>
+                    {entry.name}
+                </div>
+
+                <!-- <Path parents={entry.parents} {open} size="s" /> -->
+            </div>
         </div>
 
-        <div class="flex items-center gap-1">
+        <div
+            class="p-2 flex gap-2 items-stretch bg-slate-300 bg-opacity-10
+        border border-l-0 border-solid border-slate-600 border-opacity-30"
+        >
             {#if entry.type === 0}
                 <DateIndicator
+                    muted
                     bind:date={entry.do_date}
                     on:changed={change_date}
                 />
@@ -74,6 +90,7 @@
             {#if entry.type !== 2}
                 <DateIndicator
                     due
+                    muted
                     bind:date={entry.due_date}
                     on:changed={change_date}
                 />
@@ -82,7 +99,7 @@
             <div
                 on:click={() => open(entry.file_path)}
                 on:keyup
-                class="w-7 flex items-center cursor-pointer pr-2"
+                class="w-5 flex items-center cursor-pointer border-0 text-slate-900 text-opacity-30 hover:text-opacity-100"
             >
                 <Open />
             </div>

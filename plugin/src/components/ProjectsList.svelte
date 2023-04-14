@@ -2,17 +2,20 @@
     import { db } from '../stores/db';
     import { create_date_filter } from '../helper';
 
-    import type { Project as ProjectType, ProjectBlockConfig } from '../types';
+    import type {
+        Project as ProjectType,
+        ProjectBlockConfig,
+        Open_File,
+        Move_File,
+        Write_Metadata,
+    } from '../types';
     import { isSameDay, parse } from 'date-fns';
     import Project from './Project.svelte';
 
     export let config: ProjectBlockConfig;
-    export let open: (path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
-    export let write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
 
     function filter_projects(
         projects: ProjectType[],

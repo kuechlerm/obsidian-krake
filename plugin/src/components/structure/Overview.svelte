@@ -1,13 +1,19 @@
 <script lang="ts">
     import { db } from '../../stores/db';
     import { byStringProperty } from '../../helper';
-    import type { Child, Entry, Topic } from '../../types';
+    import type {
+        Child,
+        Entry,
+        Move_File,
+        Open_File,
+        Topic,
+    } from '../../types';
     import Column from './Column.svelte';
     import { dragging_entry, drop, drag_over, drag_start } from './dnd';
     import OverviewEntry from './OverviewEntry.svelte';
 
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
 
     $: first_level_topics = $db.topics
         .filter((t) => t.parents.length === 0)

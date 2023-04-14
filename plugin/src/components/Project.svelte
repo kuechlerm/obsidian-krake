@@ -1,5 +1,10 @@
 <script lang="ts">
-    import type { Project } from '../types';
+    import type {
+        Move_File,
+        Open_File,
+        Project,
+        Write_Metadata,
+    } from '../types';
     import Checkbox from './subcomponents/Checkbox.svelte';
     import DateIndicator from './subcomponents/DateIndicator.svelte';
     import Open from './icons/Open.svelte';
@@ -7,12 +12,9 @@
     import { db } from '../stores/db';
 
     export let project: Project;
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
-    export let write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
 
     async function save() {
         $db.projects = $db.projects;

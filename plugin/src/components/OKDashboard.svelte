@@ -1,9 +1,10 @@
 <script lang="ts">
+    import type { Move_File, Open_File } from '../types';
     import Actions from './Actions.svelte';
     import Overview from './structure/Overview.svelte';
 
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
     export let migrate_db: () => Promise<void>;
 
     let current_tab = 'overview';

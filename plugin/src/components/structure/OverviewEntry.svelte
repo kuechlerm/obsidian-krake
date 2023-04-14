@@ -1,6 +1,6 @@
 <script lang="ts">
     import { toggle_done_workflow } from '../../workflows/toggle_done';
-    import type { Entry } from '../../types';
+    import type { Entry, Move_File, Open_File } from '../../types';
     import Flag from '../icons/Flag.svelte';
     import Folder from '../icons/Folder.svelte';
     import Inbox from '../icons/Inbox.svelte';
@@ -9,8 +9,8 @@
 
     export let entry: Entry;
     export let selected: boolean;
-    export let open: (file_path: string) => void;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
+    export let open: Open_File;
+    export let move_file: Move_File;
 
     $: color = entry.type === 0 ? 'teal' : entry.type === 1 ? 'violet' : 'pink';
 

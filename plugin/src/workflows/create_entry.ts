@@ -8,10 +8,11 @@ import {
 } from '../stores/db';
 import { get_collection } from '../helper';
 import { get } from 'svelte/store';
-import type { Child, EntryType } from '../types';
+import type { Child, EntryType, Write_Metadata } from '../types';
 import { name_from_file_path } from '../helper';
 import { entry_header_file_content } from '../utils/file_content_inits';
 
+// TODO cleanup
 export async function create_entry_workflow(args: {
     line_no: number; // editor.getCursor().line
     type: 'task' | 'project' | 'topic';
@@ -22,10 +23,7 @@ export async function create_entry_workflow(args: {
     normalize_path: (path: string) => string; // normalizePath(path)
     get_editor_line: (line_no: number) => string; // editor.getLine(line_no)
     set_editor_line: (line_no: number, line_text: string) => void; //editor.setLine(line_no, new_text)
-    write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void>; // write_metadata(app)(file_path, metadata)
+    write_metadata: Write_Metadata; // write_metadata(app)(file_path, metadata)
     open_file: (file: TFile) => Promise<void>;
 }) {
     const line_text = args.get_editor_line(args.line_no);

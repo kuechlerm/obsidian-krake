@@ -1,4 +1,4 @@
-import { paths } from 'src/paths';
+import { paths } from '../paths';
 import {
     create_default_project,
     create_default_task,

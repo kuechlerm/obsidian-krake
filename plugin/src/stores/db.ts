@@ -97,9 +97,9 @@ const by_not_file_path_from =
 function create_db_store() {
     const store = writable<DB>(empty_db());
 
-    async function check_parents(entry: Entry) {
+    function check_parents(entry: Entry) {
         if (entry.parents.length === 0) {
-            await add_parent(entry, {
+            add_parent(entry, {
                 type: 2,
                 name: 'Inbox',
                 file_path: `${paths.topic}/Inbox.md`,
@@ -152,8 +152,8 @@ function create_db_store() {
         });
     }
 
-    const add_task = async (task: Task) => {
-        await check_parents(task);
+    const add_task = (task: Task) => {
+        check_parents(task);
 
         store.update((curr) => {
             curr.tasks.push(task);
@@ -161,8 +161,8 @@ function create_db_store() {
         });
     };
 
-    const add_project = async (project: Project) => {
-        await check_parents(project);
+    const add_project = (project: Project) => {
+        check_parents(project);
 
         store.update((curr) => {
             curr.projects.push(project);
@@ -170,14 +170,14 @@ function create_db_store() {
         });
     };
 
-    const add_topic = async (topic: Topic) => {
+    const add_topic = (topic: Topic) => {
         store.update((curr) => {
             curr.topics.push(topic);
             return curr;
         });
     };
 
-    const toggle_done = async (entry: Entry, done: boolean) => {
+    const toggle_done = (entry: Entry, done: boolean) => {
         entry.done = done ? new Date() : undefined;
 
         if (done) {
@@ -254,7 +254,7 @@ function create_db_store() {
         return updated_entry;
     };
 
-    const add_parent = async (
+    const add_parent = (
         entry: Entry,
         new_parent_info: Omit<Parent, 'parents'>
     ) => {
@@ -316,7 +316,7 @@ function create_db_store() {
         return updated_parent_entry;
     };
 
-    const remove_parent = async (entry: Entry, parent_to_remove: Parent) => {
+    const remove_parent = (entry: Entry, parent_to_remove: Parent) => {
         store.update((curr) => {
             entry.parents = entry.parents.filter(
                 by_not_file_path_from(parent_to_remove)
@@ -345,9 +345,9 @@ function create_db_store() {
         });
     };
 
-    const remove_entry = async (entry: Entry) => {
+    const remove_entry = (entry: Entry) => {
         for (const parent of entry.parents) {
-            await remove_parent(entry, parent);
+            remove_parent(entry, parent);
         }
 
         store.update((curr) => {
@@ -384,7 +384,7 @@ function create_db_store() {
         });
     };
 
-    const change_type = async (
+    const change_type = (
         entry: Entry,
         new_type: EntryType,
         new_path: string
@@ -412,7 +412,7 @@ function create_db_store() {
         });
     };
 
-    const clear = async () => {
+    const clear = () => {
         store.set(empty_db());
     };
 

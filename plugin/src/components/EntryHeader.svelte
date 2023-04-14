@@ -9,7 +9,6 @@
     import XMark from './icons/XMark.svelte';
     import Folder from './icons/Folder.svelte';
     import Trash from './icons/Trash.svelte';
-    import IconButton from './subcomponents/IconButton.svelte';
     import Pen from './icons/Pen.svelte';
     import Flyout from './subcomponents/Flyout.svelte';
     import type {
@@ -19,6 +18,10 @@
         Parent,
         EntryType,
         Write_Metadata,
+        Move_File,
+        Open_File,
+        Delete_File,
+        Suggest_Parent,
     } from '../types';
     import { paths } from '../paths';
     import { days_ago_text, get_collection } from '../helper';
@@ -32,13 +35,10 @@
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
-    export let open: (file_path: string) => void;
-    export let suggest_parent: (
-        parent_entry_type: EntryType,
-        exclude_paths: string[]
-    ) => Promise<Omit<Parent, 'parents'>>;
-    export let move_file: (from_path: string, to_path: string) => Promise<void>;
-    export let delete_file: (file_path: string) => Promise<void>;
+    export let open: Open_File;
+    export let suggest_parent: Suggest_Parent;
+    export let move_file: Move_File;
+    export let delete_file: Delete_File;
     export let write_metadata: Write_Metadata;
 
     // TODO path_to_collection?
@@ -140,7 +140,7 @@
 <!-- need this frame to simulate the code-block in obsidian  -->
 <div class="p-2 overflow-hidden">
     <div
-        class="rounded-lg overflow-hidden pr-2 bg-slate-300 bg-opacity-10 border border-solid border-slate-600 border-opacity-30 space-y-2 mt-4 shadow-md"
+        class="rounded-lg overflow-hidden bg-slate-300 bg-opacity-10 border border-solid border-slate-600 border-opacity-30 space-y-2 mt-4 shadow-md"
     >
         {#if entry}
             <div class="flex gap-2">
@@ -161,7 +161,7 @@
                     {/if}
                 </div>
 
-                <div class="flex-1 py-2 flex items-center justify-between">
+                <div class="flex-1 pr-4 py-2 flex items-center justify-between">
                     <div class="">
                         <Path
                             parents={entry.parents}
@@ -171,10 +171,8 @@
                         />
                     </div>
 
-                    <div class="flex gap-1">
-                        <div
-                            class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
-                        >
+                    <div class="flex gap-3 items-center">
+                        <div class="flex items-center gap-1 text-sm font-light">
                             <div class="w-5 flex items-center">
                                 <Add />
                             </div>
@@ -183,9 +181,7 @@
                                 {days_ago_text(entry.created)}
                             {/if}
                         </div>
-                        <div
-                            class="flex items-center gap-1 bg-neutral-100 rounded-lg px-1 py-1.5 text-sm"
-                        >
+                        <div class="flex items-center gap-1 text-sm font-light">
                             <div class="w-5 flex items-center">
                                 <Eye />
                             </div>
@@ -208,28 +204,36 @@
                             />
                         {/if}
 
-                        <IconButton color="slate" on:click={toggle_actions}>
+                        <div
+                            class="w-5 flex items-center cursor-pointer text-slate-900"
+                            on:click={toggle_actions}
+                            on:keyup
+                        >
                             {#if actions_visible}
                                 <XMark />
                             {:else}
                                 <Cog />
                             {/if}
-                        </IconButton>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {#if actions_visible}
-                <div class="flex justify-end gap-2 items-enter">
-                    <IconButton color="red" on:click={delete_entry}>
+                <div class="flex justify-end gap-2 items-enter pr-4">
+                    <div
+                        class="w-5 flex items-center cursor-pointer text-slate-900"
+                        on:click={delete_entry}
+                        on:keyup
+                    >
                         <Trash />
-                    </IconButton>
+                    </div>
 
                     <Flyout target="entry_picker" bind:show={show_entry_picker}>
                         <div class="flex flex-col gap-1">
                             {#if entry_type !== 0}
                                 <div
-                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    class="bg-slate-50 text-slate-900 rounded-lg px-2 py-1 cursor-pointer"
                                     on:click={() => change_type(0)}
                                     on:keyup
                                 >
@@ -239,7 +243,7 @@
 
                             {#if entry_type !== 1}
                                 <div
-                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    class="bg-slate-50 text-slate-900 rounded-lg px-2 py-1 cursor-pointer"
                                     on:click={() => change_type(1)}
                                     on:keyup
                                 >
@@ -249,7 +253,7 @@
 
                             {#if entry_type !== 2}
                                 <div
-                                    class="bg-neutral-700 text-neutral-50 rounded-lg px-2 py-1 cursor-pointer"
+                                    class="bg-slate-50 text-slate-900 rounded-lg px-2 py-1 cursor-pointer"
                                     on:click={() => change_type(2)}
                                     on:keyup
                                 >
@@ -259,26 +263,32 @@
                         </div>
                     </Flyout>
 
-                    <IconButton
+                    <div
                         id="entry_picker"
-                        color="sky"
+                        class="w-5 flex items-center cursor-pointer text-slate-900"
                         on:click={() => (show_entry_picker = true)}
+                        on:keyup
                     >
                         <Pen />
-                    </IconButton>
+                    </div>
 
                     {#if entry_type !== 2}
-                        <IconButton
-                            color="violet"
+                        <div
+                            class="w-5 flex items-center cursor-pointer text-slate-900"
                             on:click={add_project_parent}
+                            on:keyup
                         >
                             <Flag />
-                        </IconButton>
+                        </div>
                     {/if}
 
-                    <IconButton color="pink" on:click={add_topic_parent}>
+                    <div
+                        class="w-5 flex items-center cursor-pointer text-slate-900"
+                        on:click={add_topic_parent}
+                        on:keyup
+                    >
                         <Folder />
-                    </IconButton>
+                    </div>
                 </div>
             {/if}
 

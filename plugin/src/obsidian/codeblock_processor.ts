@@ -28,7 +28,7 @@ export const process_krake_codeblock =
                 target: el,
                 props: {
                     open: open_path(app),
-                    move_file: (f, t) => move_file(app, f, t),
+                    move_file: (f, t) => move_file(app)(f, t),
                     write_metadata: write_metadata(app),
                     config,
                 },
@@ -41,7 +41,7 @@ export const process_krake_codeblock =
                 target: el,
                 props: {
                     open: open_path(app),
-                    move_file: (f, t) => move_file(app, f, t),
+                    move_file: (f, t) => move_file(app)(f, t),
                     write_metadata: write_metadata(app),
                     config,
                 },
@@ -66,7 +66,7 @@ export const process_krake_codeblock =
                 props: {
                     path: ctx.sourcePath,
                     open: open_path(app),
-                    move_file: (f, t) => move_file(app, f, t),
+                    move_file: (f, t) => move_file(app)(f, t),
                     delete_file: delete_file(app),
                     write_metadata: write_metadata(app),
 
