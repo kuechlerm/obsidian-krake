@@ -1,31 +1,28 @@
 <script lang="ts">
-	export let checked: boolean;
-	export let readonly: boolean = false;
+    import { createEventDispatcher } from 'svelte';
+    import Check from '../icons/Check.svelte';
 
-	export let color: string = 'teal-500';
+    const dispatch = createEventDispatcher();
+
+    export let checked: boolean;
+    export let readonly: boolean = false;
+
+    const check = () => {
+        if (!readonly) {
+            checked = !checked;
+            dispatch('changed', checked);
+        }
+    };
 </script>
 
-<label class="flex gap-1.5">
-	<input
-		type="checkbox"
-		bind:checked
-		class:checked
-		disabled={readonly}
-		class="focus:ring-{color} disabled:text-{color}"
-		on:change
-	/>
-	<span>
-		<slot />
-	</span>
-</label>
-
-<style lang="postcss">
-	input[type='checkbox'],
-	input[type='checkbox']:disabled {
-		@apply bg-neutral-100 border-neutral-500 text-teal-500 rounded-md cursor-pointer;
-	}
-
-	input[type='checkbox'].checked {
-		@apply bg-teal-500 border-teal-500;
-	}
-</style>
+<div
+    class="flex items-center cursor-pointer hover:text-opacity-100"
+    class:text-opacity-40={!checked}
+    class:text-opacity-100={checked}
+    class:text-slate-600={!checked}
+    class:text-slate-50={checked}
+    on:click={check}
+    on:keyup
+>
+    <Check classes="w-4" />
+</div>

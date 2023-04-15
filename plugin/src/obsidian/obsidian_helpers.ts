@@ -35,6 +35,8 @@ export const open_next_daily =
 
         const file_name = ctx.sourcePath.split('/').at(-1);
         if (!file_name) return;
+
+        // TODO not the most secure way to remove the extension
         const file_name_without_extension = file_name.substring(
             0,
             file_name.length - 3

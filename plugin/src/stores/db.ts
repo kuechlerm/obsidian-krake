@@ -178,23 +178,28 @@ function create_db_store() {
     };
 
     const toggle_done = (entry: Entry, done: boolean) => {
-        entry.done = done ? new Date() : undefined;
+        const old_folder = done
+            ? entry.type === 0
+                ? paths.task
+                : paths.project
+            : entry.type === 0
+            ? paths.task_archive
+            : paths.project_archive;
 
-        if (done) {
-            const old_folder = entry.type === 0 ? paths.task : paths.project;
-            const new_folder =
-                entry.type === 0 ? paths.task_archive : paths.project_archive;
-            const new_path = entry.file_path.replace(old_folder, new_folder);
+        const new_folder = done
+            ? entry.type === 0
+                ? paths.task_archive
+                : paths.project_archive
+            : entry.type === 0
+            ? paths.task
+            : paths.project;
 
-            return change_path(entry.file_path, new_path, entry.name);
-        } else {
-            const old_folder =
-                entry.type === 0 ? paths.task_archive : paths.project_archive;
-            const new_folder = entry.type === 0 ? paths.task : paths.project;
-            const new_path = entry.file_path.replace(old_folder, new_folder);
+        const new_path = entry.file_path.replace(old_folder, new_folder);
 
-            return change_path(entry.file_path, new_path, entry.name);
-        }
+        const entry_update = change_path(entry.file_path, new_path, entry.name);
+        if (entry_update) entry_update.done = done ? new Date() : undefined;
+
+        return entry_update;
     };
 
     const change_path = (

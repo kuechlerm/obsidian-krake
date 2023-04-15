@@ -31,10 +31,13 @@
         await change_date_workflow(entry, write_metadata);
     }
 
-    async function toggle_done(e: Event) {
-        const checked = (e.target as any).checked;
-
-        await toggle_done_workflow(entry, checked, move_file);
+    async function toggle_done(e: { detail: boolean }) {
+        const checked = e.detail;
+        // TODO cleanup type
+        entry = (await toggle_done_workflow(entry, checked, move_file)) as
+            | Task
+            | Project
+            | Topic;
     }
 </script>
 
@@ -46,7 +49,7 @@
                 border-0"
     >
         {#if entry.type === 0}
-            <Checkbox checked={!!entry.done} on:change={toggle_done} />
+            <Checkbox checked={!!entry.done} on:changed={toggle_done} />
         {:else if entry.type === 1}
             <Flag classes="text-white" />
         {:else if entry.name === 'Inbox'}
@@ -59,7 +62,7 @@
     <div class="flex-1 flex relative">
         {#if entry.done}
             <div
-                class="absolute inset-0 flex items-center bg-neutral-100/70 rounded-lg px-2 py-4"
+                class="absolute inset-0 flex items-center bg-slate-100/70 rounded-lg px-2 py-4"
             />
         {/if}
 

@@ -8,12 +8,11 @@ import {
 } from './obsidian_helpers';
 import { EntrySuggest } from './EntrySuggest';
 import type { Parent } from '../types';
-import EntryHeader from '../components/EntryHeader.svelte';
-import TasksList from '../components/TasksList.svelte';
-import ProjectsList from '../components/ProjectsList.svelte';
-import TopicsList from '../components/TopicsList.svelte';
-import DailyHeader from '../components/DailyHeader.svelte';
+import EntryHeader from '../components/headers/EntryHeader.svelte';
+import DailyHeader from '../components/headers/DailyHeader.svelte';
 import { parse_config } from '../helper';
+import { parse } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 export const process_krake_codeblock =
     (app: App) =>
@@ -23,43 +22,6 @@ export const process_krake_codeblock =
 
         const config = parse_config(source, ctx.sourcePath);
 
-        if (config.type === 'tasks') {
-            new TasksList({
-                target: el,
-                props: {
-                    open: open_path(app),
-                    move_file: (f, t) => move_file(app)(f, t),
-                    write_metadata: write_metadata(app),
-                    config,
-                },
-            });
-            return;
-        }
-
-        if (config.type === 'projects') {
-            new ProjectsList({
-                target: el,
-                props: {
-                    open: open_path(app),
-                    move_file: (f, t) => move_file(app)(f, t),
-                    write_metadata: write_metadata(app),
-                    config,
-                },
-            });
-            return;
-        }
-
-        if (config.type === 'topics') {
-            new TopicsList({
-                target: el,
-                props: {
-                    open: open_path(app),
-                    config,
-                },
-            });
-            return;
-        }
-
         if (config.type === 'entry-header') {
             new EntryHeader({
                 target: el,
@@ -67,8 +29,8 @@ export const process_krake_codeblock =
                     path: ctx.sourcePath,
                     open: open_path(app),
                     move_file: (f, t) => move_file(app)(f, t),
-                    delete_file: delete_file(app),
                     write_metadata: write_metadata(app),
+                    delete_file: delete_file(app),
 
                     suggest_parent: (parent_entry_type, exclude_paths) => {
                         return new Promise<Omit<Parent, 'parents'>>(
@@ -89,10 +51,24 @@ export const process_krake_codeblock =
         }
 
         if (config.type === 'daily-header') {
+            // TODO move to helpers / settings
+            const file_name_format = 'EEEEEE dd.MM.yyyy';
+            const basename = ctx.sourcePath.split('/').at(-1)?.split('.').at(0);
+
+            if (!basename) throw new Error('basename is undefined');
+
+            const date = parse(basename, file_name_format, new Date(), {
+                locale: de,
+            });
+
             new DailyHeader({
                 target: el,
                 props: {
-                    open: open_next_daily(app, ctx),
+                    date,
+                    open_next: open_next_daily(app, ctx),
+                    open: open_path(app),
+                    move_file: (f, t) => move_file(app)(f, t),
+                    write_metadata: write_metadata(app),
                 },
             });
 

@@ -1,0 +1,101 @@
+<script lang="ts">
+    import { get_collection } from '../../helper';
+    import { db } from '../../stores/db';
+    import type {
+        EntryType,
+        Move_File,
+        Open_File,
+        Project,
+        Task,
+        Topic,
+        Write_Metadata,
+    } from '../../types';
+    import ListEntry from '../ListEntry.svelte';
+
+    export let filter_info:
+        | { parent_file_path: string }
+        | { due_date_before?: Date; do_date_before?: Date; done_on?: Date };
+
+    export let open: Open_File;
+    export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
+
+    $: filered_topics = filter_entries(2);
+    $: filered_projects = filter_entries(1);
+    $: filered_tasks = filter_entries(0);
+
+    function filter_entries(list_entry_type: EntryType) {
+        const collection = get_collection($db, list_entry_type) as (
+            | Task
+            | Project
+            | Topic
+        )[];
+
+        collection.filter((entry) => entry.file_path === '/');
+
+        if ('parent_file_path' in filter_info) {
+            const parent_path = filter_info.parent_file_path;
+
+            return collection.filter((entry) =>
+                entry.parents.some((p) => p.file_path === parent_path)
+            );
+        } else {
+            const { done_on, do_date_before, due_date_before } = filter_info;
+
+            const by_dates = (entry: Task | Project | Topic) => {
+                if (done_on && entry.done === done_on) return true;
+
+                if (
+                    do_date_before &&
+                    entry.type === 0 &&
+                    entry.do_date &&
+                    entry.do_date < do_date_before
+                )
+                    return true;
+
+                if (
+                    due_date_before &&
+                    entry.type !== 2 &&
+                    entry.due_date &&
+                    entry.due_date < due_date_before
+                )
+                    return true;
+
+                return false;
+            };
+
+            return collection.filter(by_dates);
+        }
+    }
+</script>
+
+<div class="space-y-4">
+    {#if filered_topics}
+        <div class="space-y-2">
+            {#each filered_topics as topic (topic.file_path)}
+                <ListEntry entry={topic} {open} {move_file} {write_metadata} />
+            {/each}
+        </div>
+    {/if}
+
+    {#if filered_projects}
+        <div class="space-y-2">
+            {#each filered_projects as project (project.file_path)}
+                <ListEntry
+                    entry={project}
+                    {open}
+                    {move_file}
+                    {write_metadata}
+                />
+            {/each}
+        </div>
+    {/if}
+
+    {#if filered_tasks}
+        <div class="space-y-2">
+            {#each filered_tasks as task (task.file_path)}
+                <ListEntry entry={task} {open} {move_file} {write_metadata} />
+            {/each}
+        </div>
+    {/if}
+</div>

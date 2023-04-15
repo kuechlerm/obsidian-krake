@@ -31,7 +31,7 @@
 
 <div
     class="flex items-center gap-1 cursor-pointer text-slate-900 hover:text-opacity-100"
-    class:text-opacity-30={muted}
+    class:text-opacity-30={muted && !date}
     class:past={distance < 0}
     on:click={() => picker.showPicker()}
     on:keyup
