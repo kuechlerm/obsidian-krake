@@ -17,15 +17,17 @@
         | { parent_file_path: string }
         | { due_date_before?: Date; do_date_before?: Date; done_on?: Date };
 
+    export let hide_done: boolean = false;
+
     export let open: Open_File;
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
 
-    $: filered_topics = filter_entries($db, 2);
-    $: filered_projects = filter_entries($db, 1);
-    $: filered_tasks = filter_entries($db, 0);
+    $: filered_topics = filter_entries($db, 2, hide_done);
+    $: filered_projects = filter_entries($db, 1, hide_done);
+    $: filered_tasks = filter_entries($db, 0, hide_done);
 
-    function filter_entries(db: DB, list_entry_type: EntryType) {
+    function filter_entries(db: DB, list_entry_type: EntryType, done: boolean) {
         const collection = get_collection(db, list_entry_type) as (
             | Task
             | Project
@@ -34,10 +36,12 @@
 
         collection.filter((entry) => entry.file_path === '/');
 
+        let result;
+
         if ('parent_file_path' in filter_info) {
             const parent_path = filter_info.parent_file_path;
 
-            return collection.filter((entry) =>
+            result = collection.filter((entry) =>
                 entry.parents.some((p) => p.file_path === parent_path)
             );
         } else {
@@ -65,8 +69,12 @@
                 return false;
             };
 
-            return collection.filter(by_dates);
+            result = collection.filter(by_dates);
         }
+
+        if (done) result = result.filter((entry) => !entry.done);
+
+        return result;
     }
 </script>
 

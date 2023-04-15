@@ -33,6 +33,7 @@
     import { change_date_workflow } from '../../workflows/change_date';
     import HeaderFrame from './HeaderFrame.svelte';
     import HeaderLists from './HeaderLists.svelte';
+    import Check from '../icons/Check.svelte';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -41,6 +42,8 @@
     export let write_metadata: Write_Metadata;
     export let suggest_parent: Suggest_Parent;
     export let delete_file: Delete_File;
+
+    let hide_done = false;
 
     // TODO path_to_collection?
     $: entry_type = (
@@ -269,8 +272,20 @@
         {/if}
 
         <div class="p-4">
+            <div class="flex justify-end">
+                <div
+                    class="cursor-pointer"
+                    class:opacity-20={hide_done}
+                    on:click={() => (hide_done = !hide_done)}
+                    on:keyup
+                >
+                    <Check classes="w-4" />
+                </div>
+            </div>
+
             <HeaderLists
                 filter_info={{ parent_file_path: entry.file_path }}
+                {hide_done}
                 {open}
                 {move_file}
                 {write_metadata}
