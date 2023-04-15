@@ -28,10 +28,11 @@ export async function create_entry_workflow(args: {
 }) {
     const line_text = args.get_editor_line(args.line_no);
 
+    // TODO needed? I think I used this because SyncThing had problems with some characters
     const clean_text = line_text
         .trimStart()
         .replace(/^-/, '')
-        .replace(/[^a-zäöüß1-9-_, ]/gi, '') // remove everything but text, numbers, space
+        .replace(/[^a-zäöüß0-9-_, ]/gi, '') // remove everything but text, numbers, space
         .trim();
 
     if (!clean_text) return;

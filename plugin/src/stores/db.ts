@@ -197,8 +197,21 @@ function create_db_store() {
         const new_path = entry.file_path.replace(old_folder, new_folder);
 
         const entry_update = change_path(entry.file_path, new_path, entry.name);
+
+        if (!entry_update) throw new Error('entry_update is undefined');
+
         if (entry_update) entry_update.done = done ? new Date() : undefined;
 
+        store.update((curr) => {
+            const collection = get_collection(curr, entry_update.type);
+            const entry = collection.find(
+                (e) => e.file_path === entry_update.file_path
+            );
+            if (entry) entry.done = entry_update.done;
+            return curr;
+        });
+
+        // TODO returning is different to all other functions where we only update the store
         return entry_update;
     };
 

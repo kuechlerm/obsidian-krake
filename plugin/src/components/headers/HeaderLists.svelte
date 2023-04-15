@@ -2,6 +2,7 @@
     import { get_collection } from '../../helper';
     import { db } from '../../stores/db';
     import type {
+        DB,
         EntryType,
         Move_File,
         Open_File,
@@ -20,12 +21,12 @@
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
 
-    $: filered_topics = filter_entries(2);
-    $: filered_projects = filter_entries(1);
-    $: filered_tasks = filter_entries(0);
+    $: filered_topics = filter_entries($db, 2);
+    $: filered_projects = filter_entries($db, 1);
+    $: filered_tasks = filter_entries($db, 0);
 
-    function filter_entries(list_entry_type: EntryType) {
-        const collection = get_collection($db, list_entry_type) as (
+    function filter_entries(db: DB, list_entry_type: EntryType) {
+        const collection = get_collection(db, list_entry_type) as (
             | Task
             | Project
             | Topic
