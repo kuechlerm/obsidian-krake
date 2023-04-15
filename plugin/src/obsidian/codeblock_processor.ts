@@ -20,7 +20,8 @@ export const process_krake_codeblock =
         // TODO why?
         // ctx.addChild()
 
-        const config = parse_config(source, ctx.sourcePath);
+        // TODO parse_config still needed?
+        const config = parse_config(source);
 
         if (config.type === 'entry-header') {
             new EntryHeader({

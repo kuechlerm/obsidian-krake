@@ -40,33 +40,24 @@ describe('helper', () => {
 
     describe('parse_config', () => {
         test('empty lines', () => {
-            const config = parse_config('', 'Krake/Tasks/Test.md');
+            const config = parse_config('');
             expect(config).toEqual({
                 type: '',
-                file_path: 'Krake/Tasks/Test.md',
             });
         });
 
         test('only type specified', () => {
-            const config = parse_config(
-                'type:entry-header',
-                'Krake/Tasks/Test.md'
-            );
+            const config = parse_config('type:entry-header');
             expect(config).toEqual({
                 type: 'entry-header',
-                file_path: 'Krake/Tasks/Test.md',
             });
         });
 
         test('multiple config lines', () => {
-            const config = parse_config(
-                'type:entry-header\ndone:true',
-                'Krake/Tasks/Test.md'
-            );
+            const config = parse_config('type:entry-header\ndone:true');
             expect(config).toEqual({
                 type: 'entry-header',
                 done: 'true',
-                file_path: 'Krake/Tasks/Test.md',
             });
         });
     });

@@ -7,6 +7,7 @@
         Move_File,
         Open_File,
         Topic,
+        Write_Metadata,
     } from '../../types';
     import Column from './Column.svelte';
     import { dragging_entry, drop, drag_over, drag_start } from './dnd';
@@ -14,6 +15,7 @@
 
     export let open: Open_File;
     export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
 
     $: first_level_topics = $db.topics
         .filter((t) => t.parents.length === 0)
@@ -45,6 +47,7 @@
                     entry={topic}
                     {open}
                     {move_file}
+                    {write_metadata}
                     selected={topic.file_path === selected_entry?.file_path}
                 />
             </div>
@@ -53,7 +56,12 @@
 
     {#if selected_entry}
         {#key selected_entry}
-            <Column parent_entry={selected_entry} {move_file} {open} />
+            <Column
+                parent_entry={selected_entry}
+                {move_file}
+                {open}
+                {write_metadata}
+            />
         {/key}
     {/if}
 </div>

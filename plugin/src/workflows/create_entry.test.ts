@@ -85,7 +85,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.task}/Test Task.md`,
-            entry_header_file_content('task')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).not.toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.project}/Test Project.md`,
-            entry_header_file_content('project')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).not.toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.topic}/Test Topic.md`,
-            entry_header_file_content('topic')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).not.toHaveBeenCalled();
@@ -226,7 +226,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.task}/Test Task.md`,
-            entry_header_file_content('task')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).toHaveBeenCalledOnce();
@@ -292,7 +292,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.task}/Test Task.md`,
-            entry_header_file_content('task')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).toHaveBeenCalledOnce();
@@ -359,7 +359,7 @@ describe('create_entry', () => {
 
         expect(create_file_mock).toHaveBeenCalledWith(
             `${paths.project}/Test Project.md`,
-            entry_header_file_content('project')
+            entry_header_file_content()
         );
 
         expect(write_metadata_mock).toHaveBeenCalledOnce();

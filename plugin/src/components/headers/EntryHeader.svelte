@@ -62,12 +62,13 @@
         change_date_workflow(entry, write_metadata);
     }
 
-    async function toggle_done(e: Event) {
+    async function toggle_done(e: { detail: boolean }) {
         if (!entry) return;
 
-        const checked = (e.target as any).checked;
+        console.log('ping', e);
+        const checked = e.detail;
 
-        await toggle_done_workflow(entry, checked, move_file);
+        await toggle_done_workflow(entry, checked, move_file, write_metadata);
     }
 
     function toggle_actions() {
@@ -115,7 +116,7 @@
 
         await move_file(entry.file_path, new_path);
 
-        await db.change_type(entry, to, new_path);
+        db.change_type(entry, to, new_path);
     }
 </script>
 
@@ -126,7 +127,7 @@
                 class="w-10 px-2.5 flex items-center bg-{color}-600 bg-opacity-70 h-auto rounded-br-lg"
             >
                 {#if entry.type === 0}
-                    <Checkbox checked={!!entry.done} on:change={toggle_done} />
+                    <Checkbox checked={!!entry.done} on:changed={toggle_done} />
                 {:else if entry.type === 1}
                     <Flag classes="text-white" />
                 {:else if entry.name === 'Inbox'}

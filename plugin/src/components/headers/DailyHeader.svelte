@@ -11,8 +11,6 @@
     export let open: Open_File;
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
-
-    $: console.log('data', date);
 </script>
 
 <HeaderFrame>

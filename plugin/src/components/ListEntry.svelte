@@ -34,10 +34,12 @@
     async function toggle_done(e: { detail: boolean }) {
         const checked = e.detail;
         // TODO cleanup type
-        entry = (await toggle_done_workflow(entry, checked, move_file)) as
-            | Task
-            | Project
-            | Topic;
+        entry = (await toggle_done_workflow(
+            entry,
+            checked,
+            move_file,
+            write_metadata
+        )) as Task | Project | Topic;
     }
 </script>
 

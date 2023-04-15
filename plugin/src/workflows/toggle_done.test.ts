@@ -36,12 +36,28 @@ describe('toggle_done', () => {
             /** noop */
         });
 
-        await toggle_done_workflow(task, true, move_file_mock);
+        const write_metadata_mock = vi.fn().mockImplementation(async () => {
+            /** noop */
+        });
+
+        await toggle_done_workflow(
+            task,
+            true,
+            move_file_mock,
+            write_metadata_mock
+        );
 
         expect(move_file_mock).toHaveBeenCalled();
         expect(move_file_mock).toHaveBeenCalledWith(
             `${paths.task}/Task1.md`,
             `${paths.task_archive}/Task1.md`
+        );
+
+        expect(write_metadata_mock).toHaveBeenCalled();
+        expect(write_metadata_mock).toHaveBeenCalledWith(
+            `${paths.task_archive}/Task1.md`,
+            // TODO test exact date
+            { done: expect.any(String) }
         );
 
         expect(task.file_path).toBe(`${paths.task_archive}/Task1.md`);
@@ -77,12 +93,27 @@ describe('toggle_done', () => {
             /** noop */
         });
 
-        await toggle_done_workflow(task, false, move_file_mock);
+        const write_metadata_mock = vi.fn().mockImplementation(async () => {
+            /** noop */
+        });
+
+        await toggle_done_workflow(
+            task,
+            false,
+            move_file_mock,
+            write_metadata_mock
+        );
 
         expect(move_file_mock).toHaveBeenCalled();
         expect(move_file_mock).toHaveBeenCalledWith(
             `${paths.task_archive}/Task1.md`,
             `${paths.task}/Task1.md`
+        );
+
+        expect(write_metadata_mock).toHaveBeenCalled();
+        expect(write_metadata_mock).toHaveBeenCalledWith(
+            `${paths.task}/Task1.md`,
+            { done: '' }
         );
 
         expect(task.file_path).toBe(`${paths.task}/Task1.md`);
@@ -123,12 +154,28 @@ describe('toggle_done', () => {
             /** noop */
         });
 
-        await toggle_done_workflow(project, true, move_file_mock);
+        const write_metadata_mock = vi.fn().mockImplementation(async () => {
+            /** noop */
+        });
+
+        await toggle_done_workflow(
+            project,
+            true,
+            move_file_mock,
+            write_metadata_mock
+        );
 
         expect(move_file_mock).toHaveBeenCalled();
         expect(move_file_mock).toHaveBeenCalledWith(
             `${paths.project}/Project1.md`,
             `${paths.project_archive}/Project1.md`
+        );
+
+        expect(write_metadata_mock).toHaveBeenCalled();
+        expect(write_metadata_mock).toHaveBeenCalledWith(
+            `${paths.project_archive}/Project1.md`,
+            // TODO test exact date
+            { done: expect.any(String) }
         );
 
         expect(project.file_path).toBe(`${paths.project_archive}/Project1.md`);

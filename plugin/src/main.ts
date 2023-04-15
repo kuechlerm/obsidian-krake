@@ -191,7 +191,7 @@ export default class ObsidianKrakePlugin extends Plugin {
                     }
                 }
 
-                if (path === paths.project) {
+                if (path === paths.project || path === paths.project_archive) {
                     entry = create_default_project({
                         name: file.basename,
                         file_path: file.path,
@@ -209,7 +209,7 @@ export default class ObsidianKrakePlugin extends Plugin {
                     }
                 }
 
-                if (path === paths.task) {
+                if (path === paths.task || path === paths.task_archive) {
                     entry = create_default_task({
                         name: file.basename,
                         file_path: file.path,

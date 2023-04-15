@@ -11,6 +11,7 @@ const meta = {
     args: {
         move_file: async () => {},
         open: async () => {},
+        write_metadata: async () => {},
     },
     tags: [],
 } satisfies Meta<Overview>;

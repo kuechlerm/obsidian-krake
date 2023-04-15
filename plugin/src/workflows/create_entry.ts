@@ -45,7 +45,7 @@ export async function create_entry_workflow(args: {
 
     // TOOD reicht normalizePath?
     const file_path = args.normalize_path(`${folder_name}/${clean_text}.md`);
-    const file_content = entry_header_file_content(args.type);
+    const file_content = entry_header_file_content();
 
     const new_child_file = await args.create_file(file_path, file_content);
 
@@ -58,7 +58,7 @@ export async function create_entry_workflow(args: {
             name: clean_text,
             file_path,
         });
-        await db.add_task(new_task);
+        db.add_task(new_task);
 
         let parent_type: EntryType = 0;
         if (args.current_file_path.startsWith(paths.project)) {
@@ -73,7 +73,7 @@ export async function create_entry_workflow(args: {
         if (parent_type > 0) {
             current_file_entry_type = parent_type;
 
-            await db.add_parent(new_task, {
+            db.add_parent(new_task, {
                 type: parent_type,
                 name: args.current_file_basename,
                 file_path: args.current_file_path,
@@ -86,7 +86,7 @@ export async function create_entry_workflow(args: {
             name: clean_text,
             file_path,
         });
-        await db.add_project(new_project);
+        db.add_project(new_project);
 
         let parent_type: EntryType = 0;
         if (
@@ -99,7 +99,7 @@ export async function create_entry_workflow(args: {
         if (parent_type > 0) {
             current_file_entry_type = parent_type;
 
-            await db.add_parent(new_project, {
+            db.add_parent(new_project, {
                 type: parent_type,
                 name: args.current_file_basename,
                 file_path: args.current_file_path,
@@ -112,7 +112,7 @@ export async function create_entry_workflow(args: {
             name: clean_text,
             file_path,
         });
-        await db.add_topic(new_topic);
+        db.add_topic(new_topic);
 
         let parent_type: EntryType = 0;
         if (
@@ -125,7 +125,7 @@ export async function create_entry_workflow(args: {
         if (parent_type) {
             current_file_entry_type = parent_type;
 
-            await db.add_parent(new_topic, {
+            db.add_parent(new_topic, {
                 type: parent_type,
                 name: args.current_file_basename,
                 file_path: args.current_file_path,
@@ -138,8 +138,6 @@ export async function create_entry_workflow(args: {
         const parent = get_collection(get(db), current_file_entry_type).find(
             (x) => x.file_path === args.current_file_path
         ) as { children: Child[] } | undefined;
-
-        console.log('++++++', parent);
 
         if (!parent) throw new Error('parent not found');
 

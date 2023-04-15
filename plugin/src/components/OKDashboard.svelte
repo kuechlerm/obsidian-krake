@@ -1,10 +1,12 @@
 <script lang="ts">
-    import type { Move_File, Open_File } from '../types';
+    import type { Move_File, Open_File, Write_Metadata } from '../types';
     import Actions from './Actions.svelte';
     import Overview from './structure/Overview.svelte';
 
     export let open: Open_File;
     export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
+
     export let migrate_db: () => Promise<void>;
 
     let current_tab = 'overview';
@@ -45,7 +47,7 @@
     </div>
 
     {#if current_tab === 'overview'}
-        <Overview {open} {move_file} />
+        <Overview {open} {move_file} {write_metadata} />
     {:else if current_tab === 'actions'}
         <Actions {migrate_db} />
     {/if}

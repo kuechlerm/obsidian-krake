@@ -16,6 +16,7 @@ const meta = {
         }),
         open: async () => console.log('open'),
         move_file: async () => console.log('move_file'),
+        write_metadata: async () => console.log('write_metadata'),
         selected: false,
     },
     tags: [],

@@ -84,7 +84,7 @@ export function name_from_file_path(path: string) {
     return parts[parts.length - 1].replace('.md', '');
 }
 
-export function parse_config(source: string, file_path: string) {
+export function parse_config(source: string) {
     const lines = source.split('\n');
 
     const config: any = lines.reduce((obj, l) => {
@@ -93,7 +93,6 @@ export function parse_config(source: string, file_path: string) {
     }, {});
 
     config.type ??= '';
-    config.file_path = file_path;
 
     return config;
 }

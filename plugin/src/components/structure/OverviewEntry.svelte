@@ -1,6 +1,11 @@
 <script lang="ts">
     import { toggle_done_workflow } from '../../workflows/toggle_done';
-    import type { Entry, Move_File, Open_File } from '../../types';
+    import type {
+        Entry,
+        Move_File,
+        Open_File,
+        Write_Metadata,
+    } from '../../types';
     import Flag from '../icons/Flag.svelte';
     import Folder from '../icons/Folder.svelte';
     import Inbox from '../icons/Inbox.svelte';
@@ -11,13 +16,14 @@
     export let selected: boolean;
     export let open: Open_File;
     export let move_file: Move_File;
+    export let write_metadata: Write_Metadata;
 
     $: color = entry.type === 0 ? 'teal' : entry.type === 1 ? 'violet' : 'pink';
 
     async function toggle_done(e: Event) {
         const checked = (e.target as any).checked;
 
-        await toggle_done_workflow(entry, checked, move_file);
+        await toggle_done_workflow(entry, checked, move_file, write_metadata);
     }
 </script>
 
@@ -25,8 +31,7 @@
     class="flex text-neutral-900 cursor-pointer shadow-md rounded-lg overflow-hidden"
 >
     <div
-        class="w-7 px-1.5 flex items-center bg-{color}-600 bg-opacity-30 h-auto rounded-l-lg
-                border border-solid border-{color}-600 border-opacity-0"
+        class="w-7 px-1.5 flex items-center bg-{color}-600 bg-opacity-30 h-auto rounded-l-lg"
         class:selected
     >
         {#if entry.type === 0}
