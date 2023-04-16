@@ -2,6 +2,7 @@
     import type { Move_File, Open_File, Write_Metadata } from '../types';
     import Actions from './Actions.svelte';
     import Overview from './structure/Overview.svelte';
+    import Button from './subcomponents/Button.svelte';
 
     export let open: Open_File;
     export let move_file: Move_File;
@@ -15,22 +16,24 @@
 
 <div class="space-y-4">
     <div
-        class="border-0 border-b-2 border-solid border-slate-600/30 p-2 flex justify-between"
+        class="flex justify-between items-center text-center bg-slate-600/70 rounded-lg px-4 py-0.5"
     >
-        <div class="flex gap-2">
+        <div class="flex gap-2 text-slate-200 font-medium">
             <div
-                class="cursor-pointer p-2 {current_tab === 'overview'
-                    ? 'bg-slate-400'
-                    : 'bg-slate-100'} rounded-lg"
+                class="inline-block cursor-pointer p-3
+                    border-0 border-b-4 border-solid border-transparent hover:text-white hover:border-slate-50"
+                class:border-slate-50={current_tab === 'overview'}
+                class:text-white={current_tab === 'overview'}
                 on:click={() => (current_tab = 'overview')}
                 on:keyup
             >
                 Overview
             </div>
             <div
-                class="cursor-pointer p-2 {current_tab === 'actions'
-                    ? 'bg-slate-400'
-                    : 'bg-slate-100'} rounded-lg"
+                class="inline-block cursor-pointer p-3
+                    border-0 border-b-4 border-solid border-transparent hover:text-white hover:border-slate-50"
+                class:border-slate-50={current_tab === 'actions'}
+                class:text-white={current_tab === 'actions'}
                 on:click={() => (current_tab = 'actions')}
                 on:keyup
             >
@@ -38,12 +41,8 @@
             </div>
         </div>
 
-        <div
-            class="cursor-pointer p-2 bg-blue-500 text-white rounded-lg"
-            on:click={init_db}
-            on:keyup
-        >
-            Reload
+        <div>
+            <Button label="Reload" on:click={init_db} />
         </div>
     </div>
 
