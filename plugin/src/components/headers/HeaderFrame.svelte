@@ -1,7 +1,9 @@
 <!-- with-border simulates the frame of the obsidian document; only used for testing in Storybook -->
 <div class="p-2 overflow-hidden" class:with-border={!$$slots.default}>
     <div
-        class="rounded-lg overflow-hidden bg-slate-300 bg-opacity-10 border border-solid border-slate-600 border-opacity-30 space-y-2 mt-4 shadow-md"
+        class="rounded-lg overflow-hidden bg-slate-300 bg-opacity-10
+                border border-solid border-slate-600 border-opacity-30
+                mt-4 shadow-md"
     >
         <slot />
 

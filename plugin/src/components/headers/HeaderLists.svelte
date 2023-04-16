@@ -12,6 +12,7 @@
         Write_Metadata,
     } from '../../types';
     import ListEntry from '../ListEntry.svelte';
+    import Check from '../icons/Check.svelte';
 
     export let filter_info:
         | { parent_file_path: string }
@@ -78,33 +79,56 @@
     }
 </script>
 
-<div class="space-y-4">
-    {#if filered_topics}
-        <div class="space-y-2">
-            {#each filered_topics as topic (topic.file_path)}
-                <ListEntry entry={topic} {open} {move_file} {write_metadata} />
-            {/each}
+<div class="space-y-1">
+    <div class="flex justify-end">
+        <div
+            class="cursor-pointer flex items-center"
+            class:opacity-20={!hide_done}
+            on:click={() => (hide_done = !hide_done)}
+            on:keyup
+        >
+            <Check classes="w-4" />
         </div>
-    {/if}
+    </div>
 
-    {#if filered_projects}
-        <div class="space-y-2">
-            {#each filered_projects as project (project.file_path)}
-                <ListEntry
-                    entry={project}
-                    {open}
-                    {move_file}
-                    {write_metadata}
-                />
-            {/each}
-        </div>
-    {/if}
+    <div class="">
+        {#if filered_topics}
+            <div class="space-y-2">
+                {#each filered_topics as topic (topic.file_path)}
+                    <ListEntry
+                        entry={topic}
+                        {open}
+                        {move_file}
+                        {write_metadata}
+                    />
+                {/each}
+            </div>
+        {/if}
 
-    {#if filered_tasks}
-        <div class="space-y-2">
-            {#each filered_tasks as task (task.file_path)}
-                <ListEntry entry={task} {open} {move_file} {write_metadata} />
-            {/each}
-        </div>
-    {/if}
+        {#if filered_projects}
+            <div class="space-y-2">
+                {#each filered_projects as project (project.file_path)}
+                    <ListEntry
+                        entry={project}
+                        {open}
+                        {move_file}
+                        {write_metadata}
+                    />
+                {/each}
+            </div>
+        {/if}
+
+        {#if filered_tasks}
+            <div class="space-y-2">
+                {#each filered_tasks as task (task.file_path)}
+                    <ListEntry
+                        entry={task}
+                        {open}
+                        {move_file}
+                        {write_metadata}
+                    />
+                {/each}
+            </div>
+        {/if}
+    </div>
 </div>

@@ -5,7 +5,7 @@
     import Cog from '../icons/Cog.svelte';
     import Eye from '../icons/Eye.svelte';
     import Flag from '../icons/Flag.svelte';
-    import Path from '../subcomponents/Path.svelte';
+    import ParentPath from '../subcomponents/ParentPath.svelte';
     import XMark from '../icons/XMark.svelte';
     import Folder from '../icons/Folder.svelte';
     import Trash from '../icons/Trash.svelte';
@@ -140,16 +140,7 @@
                 {/if}
             </div>
 
-            <div class="flex-1 pr-4 py-2 flex items-center justify-between">
-                <div class="">
-                    <Path
-                        parents={entry.parents}
-                        {open}
-                        can_remove
-                        on:remove={remove_parent}
-                    />
-                </div>
-
+            <div class="flex-1 pr-4 py-2 flex items-center justify-end">
                 <div class="flex gap-3 items-center">
                     <div class="flex items-center gap-1 text-sm font-light">
                         <div class="w-5 flex items-center">
@@ -272,14 +263,14 @@
         {/if}
 
         <div class="p-4">
-            <div class="flex justify-end">
-                <div
-                    class="cursor-pointer"
-                    class:opacity-20={!hide_done}
-                    on:click={() => (hide_done = !hide_done)}
-                    on:keyup
-                >
-                    <Check classes="w-4" />
+            <div class="flex items-end justify-between">
+                <div class="">
+                    <ParentPath
+                        parents={entry.parents}
+                        {open}
+                        can_remove
+                        on:remove={remove_parent}
+                    />
                 </div>
             </div>
 

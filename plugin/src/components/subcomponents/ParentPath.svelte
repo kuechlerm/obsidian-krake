@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { Parent } from '../../types';
+    import type { Open_File, Parent } from '../../types';
     import { createEventDispatcher } from 'svelte';
     import XMark from '../icons/XMark.svelte';
 
     const dispatch = createEventDispatcher();
 
     export let parents: Parent[];
-    export let open: (file_path: string) => void;
+    export let open: Open_File;
 
     export let size: 's' | 'm' = 'm';
     export let can_remove: boolean = false;
@@ -31,12 +31,16 @@
                         : 'text-sm'}"
                 >
                     {#each parts as part, ii}
+                        <!-- Tasks cannot be a Parent -->
                         <div
-                            class="{part.type === 0
-                                ? 'bg-teal-300'
-                                : part.type === 1
+                            class="border-2 border-solid {part.type === 1
+                                ? 'border-violet-300'
+                                : 'border-pink-300'}
+                                {part.type === 1
                                 ? 'bg-violet-300'
-                                : 'bg-pink-300'} rounded-lg px-1 py-0.5 hover:underline cursor-pointer"
+                                : 'bg-pink-300'}
+                                bg-opacity-10 hover:bg-opacity-50
+                                rounded-lg px-1 py-0.5 cursor-pointer"
                             on:click={() => open_parent(part)}
                             on:keyup
                         >
