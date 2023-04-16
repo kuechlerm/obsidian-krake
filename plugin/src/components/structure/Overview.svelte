@@ -21,6 +21,10 @@
         .filter((t) => t.parents.length === 0)
         .sort(sort_topic);
 
+    $: if (first_level_topics) {
+        selected_entry = first_level_topics[0];
+    }
+
     let selected_entry: (Entry & { children: Child[] }) | null = null;
 
     const sort_topic = (a: Topic, b: Topic) => {

@@ -18,32 +18,6 @@ const empty_db = (): DB => ({
     tasks: [],
 });
 
-// TODO use on init if no Inbox-Topic exists
-// TODO fix parent -> children
-function inbox_content() {
-    const lines = [
-        '',
-        '```krake',
-        'type:entry-header',
-        '```',
-        '',
-        '### Projects',
-        '```krake',
-        'type:projects',
-        'parent:Inbox',
-        '```',
-        '',
-        '### Tasks',
-        '```krake',
-        'type:tasks',
-        'parent:Inbox',
-        '```',
-        '',
-    ];
-
-    return lines.join('\n');
-}
-
 export const create_default_task = (
     task: Partial<Task> & { name: string; file_path: string }
 ): Task => {

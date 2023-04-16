@@ -6,6 +6,7 @@
     export let open: Open_File;
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
+    export let init_db: () => Promise<void>;
 
     export let migrate_db: () => Promise<void>;
 
@@ -39,7 +40,7 @@
 
         <div
             class="cursor-pointer p-2 bg-blue-500 text-white rounded-lg"
-            on:click={() => alert('RELOAD')}
+            on:click={init_db}
             on:keyup
         >
             Reload

@@ -24,9 +24,9 @@
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
 
-    $: filered_topics = filter_entries($db, 2, hide_done);
-    $: filered_projects = filter_entries($db, 1, hide_done);
-    $: filered_tasks = filter_entries($db, 0, hide_done);
+    $: filtered_topics = filter_entries($db, 2, hide_done);
+    $: filtered_projects = filter_entries($db, 1, hide_done);
+    $: filtered_tasks = filter_entries($db, 0, hide_done);
 
     function filter_entries(db: DB, list_entry_type: EntryType, done: boolean) {
         const collection = get_collection(db, list_entry_type) as (
@@ -79,56 +79,58 @@
     }
 </script>
 
-<div class="space-y-1">
-    <div class="flex justify-end">
-        <div
-            class="cursor-pointer flex items-center"
-            class:opacity-20={!hide_done}
-            on:click={() => (hide_done = !hide_done)}
-            on:keyup
-        >
-            <Check classes="w-4" />
+{#if filtered_topics.length || filtered_projects.length || filtered_tasks.length}
+    <div class="space-y-1">
+        <div class="flex justify-end">
+            <div
+                class="cursor-pointer flex items-center"
+                class:opacity-20={!hide_done}
+                on:click={() => (hide_done = !hide_done)}
+                on:keyup
+            >
+                <Check classes="w-4" />
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            {#if filtered_topics.length}
+                <div class="space-y-2">
+                    {#each filtered_topics as topic (topic.file_path)}
+                        <ListEntry
+                            entry={topic}
+                            {open}
+                            {move_file}
+                            {write_metadata}
+                        />
+                    {/each}
+                </div>
+            {/if}
+
+            {#if filtered_projects.length}
+                <div class="space-y-2">
+                    {#each filtered_projects as project (project.file_path)}
+                        <ListEntry
+                            entry={project}
+                            {open}
+                            {move_file}
+                            {write_metadata}
+                        />
+                    {/each}
+                </div>
+            {/if}
+
+            {#if filtered_tasks.length}
+                <div class="space-y-2">
+                    {#each filtered_tasks as task (task.file_path)}
+                        <ListEntry
+                            entry={task}
+                            {open}
+                            {move_file}
+                            {write_metadata}
+                        />
+                    {/each}
+                </div>
+            {/if}
         </div>
     </div>
-
-    <div class="">
-        {#if filered_topics}
-            <div class="space-y-2">
-                {#each filered_topics as topic (topic.file_path)}
-                    <ListEntry
-                        entry={topic}
-                        {open}
-                        {move_file}
-                        {write_metadata}
-                    />
-                {/each}
-            </div>
-        {/if}
-
-        {#if filered_projects}
-            <div class="space-y-2">
-                {#each filered_projects as project (project.file_path)}
-                    <ListEntry
-                        entry={project}
-                        {open}
-                        {move_file}
-                        {write_metadata}
-                    />
-                {/each}
-            </div>
-        {/if}
-
-        {#if filered_tasks}
-            <div class="space-y-2">
-                {#each filered_tasks as task (task.file_path)}
-                    <ListEntry
-                        entry={task}
-                        {open}
-                        {move_file}
-                        {write_metadata}
-                    />
-                {/each}
-            </div>
-        {/if}
-    </div>
-</div>
+{/if}
