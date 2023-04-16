@@ -128,6 +128,16 @@ function create_db_store() {
             process_children(init_db, (topic as any)._children_text, topic);
         }
 
+        for (const task of init_db.tasks) {
+            process_for_inbox(init_db, task);
+        }
+
+        for (const project of init_db.projects) {
+            process_for_inbox(init_db, project);
+        }
+
+        // topics without parents are on the first level -> overview
+
         console.log('+++++ init db', init_db);
     };
 
@@ -150,6 +160,15 @@ function create_db_store() {
 
             add_parent(child, entry);
         });
+    }
+
+    function process_for_inbox(db: DB, entry: Entry) {
+        if (entry.parents.length > 0) return;
+
+        const inbox = db.topics.find((t) => t.name === 'Inbox');
+        if (!inbox) throw new Error('Inbox not found');
+
+        add_parent(entry, inbox);
     }
 
     const add_task = (task: Task) => {
@@ -359,6 +378,8 @@ function create_db_store() {
                 (entry as any).children
             );
 
+            check_parents(entry);
+
             return curr;
         });
     };
@@ -380,13 +401,8 @@ function create_db_store() {
                 child_entry.parents = child_entry.parents.filter(
                     (p) => p.file_path !== entry.file_path
                 );
-                if (child_entry.parents.length === 0) {
-                    add_parent(child_entry, {
-                        type: 2,
-                        name: 'Inbox',
-                        file_path: `${paths.topic}/Inbox.md`,
-                    });
-                }
+
+                check_parents(child_entry);
             }
 
             if (entry.type === 0)

@@ -48,7 +48,7 @@
                     {/each}
                 </div>
 
-                {#if can_remove}
+                {#if can_remove && parent.name !== 'Inbox'}
                     <div on:click={() => dispatch('remove', parent)} on:keyup>
                         <XMark
                             classes="w-3.5 hover:text-red-600 cursor-pointer"

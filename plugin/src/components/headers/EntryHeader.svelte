@@ -98,7 +98,7 @@
         if (!entry) return;
         const parent = e.detail;
 
-        await db.remove_parent(entry, parent);
+        db.remove_parent(entry, parent);
     }
 
     async function delete_entry() {
