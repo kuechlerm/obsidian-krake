@@ -1,6 +1,7 @@
 import type { Child, Entry, EntryType, Parent } from '../types';
-import { entry_type_to_folder_path, name_from_file_path } from '../helper';
+import { name_from_file_path } from '../helper';
 import { db } from '../stores/db';
+import { paths } from '../paths';
 
 export async function add_parent_workflow(
     entry: Entry,
@@ -14,14 +15,14 @@ export async function add_parent_workflow(
         metadata: { [key: string]: string }
     ) => Promise<void> // write_metadata(app)(file_path, metadata)
 ) {
-    const folder_path = entry_type_to_folder_path(parent_entry_type);
+    const parent_info = await suggest_parent(parent_entry_type, [
+        ...new Set([
+            `${paths.topic}/Inbox.md`,
+            ...entry.parents.map((p) => p.file_path),
+        ]),
+    ]);
 
-    const parent_info = await suggest_parent(
-        parent_entry_type,
-        entry.parents.map((p) => p.file_path)
-    );
-
-    const new_parent = await db.add_parent(entry, parent_info);
+    const new_parent = db.add_parent(entry, parent_info);
 
     if (!new_parent) throw new Error('Parent not found');
     if (!('children' in new_parent)) throw new Error('Parent has no children');

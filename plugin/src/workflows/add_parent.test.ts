@@ -50,7 +50,9 @@ describe('add_parent', () => {
         );
 
         expect(suggest_parent_mock).toHaveBeenCalled();
-        expect(suggest_parent_mock).toHaveBeenCalledWith(1, []);
+        expect(suggest_parent_mock).toHaveBeenCalledWith(1, [
+            `${paths.topic}/Inbox.md`,
+        ]);
 
         expect(write_metadata_mock).toHaveBeenCalled();
         expect(write_metadata_mock).toHaveBeenCalledWith(
@@ -90,7 +92,9 @@ describe('add_parent', () => {
         expect(task.parents.at(0)?.file_path).toBe(`${paths.topic}/Topic1.md`);
 
         expect(suggest_parent_mock).toHaveBeenCalled();
-        expect(suggest_parent_mock).toHaveBeenCalledWith(2, []);
+        expect(suggest_parent_mock).toHaveBeenCalledWith(2, [
+            `${paths.topic}/Inbox.md`,
+        ]);
 
         expect(write_metadata_mock).toHaveBeenCalled();
         expect(write_metadata_mock).toHaveBeenCalledWith(
@@ -132,7 +136,9 @@ describe('add_parent', () => {
         );
 
         expect(suggest_parent_mock).toHaveBeenCalled();
-        expect(suggest_parent_mock).toHaveBeenCalledWith(2, []);
+        expect(suggest_parent_mock).toHaveBeenCalledWith(2, [
+            `${paths.topic}/Inbox.md`,
+        ]);
 
         expect(write_metadata_mock).toHaveBeenCalled();
         expect(write_metadata_mock).toHaveBeenCalledWith(
