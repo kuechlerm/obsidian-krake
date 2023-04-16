@@ -54,7 +54,11 @@ export const process_krake_codeblock =
         if (config.type === 'daily-header') {
             // TODO move to helpers / settings
             const file_name_format = 'EEEEEE dd.MM.yyyy';
-            const basename = ctx.sourcePath.split('/').at(-1)?.split('.').at(0);
+            const basename = ctx.sourcePath
+                .split('/')
+                .at(-1)
+                ?.split('.md')
+                .at(0);
 
             if (!basename) throw new Error('basename is undefined');
 

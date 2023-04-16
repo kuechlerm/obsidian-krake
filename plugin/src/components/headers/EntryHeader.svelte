@@ -43,7 +43,7 @@
     export let suggest_parent: Suggest_Parent;
     export let delete_file: Delete_File;
 
-    let hide_done = false;
+    let hide_done = true;
 
     // TODO path_to_collection?
     $: entry_type = (
@@ -275,7 +275,7 @@
             <div class="flex justify-end">
                 <div
                     class="cursor-pointer"
-                    class:opacity-20={hide_done}
+                    class:opacity-20={!hide_done}
                     on:click={() => (hide_done = !hide_done)}
                     on:keyup
                 >

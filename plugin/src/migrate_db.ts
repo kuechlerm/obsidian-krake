@@ -41,18 +41,36 @@ export const migrate_db = (app: App) => async () => {
     const db_content = await app.vault.read(db_file);
     const db = JSON.parse(db_content) as DB_JSON;
 
+    for (const task of db.tasks) {
+        await migrate_done(app, task);
+    }
+
     for (const project of db.projects) {
-        await migrate_entry(app, project);
+        await migrate_children(app, project);
+        await migrate_done(app, project);
     }
 
     for (const topic of db.topics) {
-        await migrate_entry(app, topic);
+        await migrate_children(app, topic);
     }
 
-    // TODO set migration flag?
+    alert('Migration done. Please restart Obsidian.');
 };
 
-async function migrate_entry(app: App, entry: Project_JSON | Topic_JSON) {
+async function migrate_done(app: App, entry: Task_JSON | Project_JSON) {
+    if (!entry.done) return;
+
+    await write_metadata(app)(entry.file_path, {
+        done: entry.done.toString(),
+    });
+}
+
+async function migrate_children(app: App, entry: Project_JSON | Topic_JSON) {
+    if (!entry.children) {
+        console.warn('entry without children', entry);
+        return;
+    }
+
     const map_child_name = (child: Child) =>
         child.file_path.split('/').last()?.split('.').first();
 

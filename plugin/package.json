@@ -1,7 +1,7 @@
 {
     "name": "obsidian-krake",
     "type": "module",
-    "version": "2.0.0",
+    "version": "2.0.3",
     "description": "TODO",
     "main": "main.js",
     "scripts": {
@@ -10,7 +10,7 @@
         "build": "npx svelte-check && vite build --mode development",
         "build:prod": "npx svelte-check && vite build --mode production",
         "check": "svelte-check --tsconfig ./tsconfig.json",
-        "bumpversion": "node version-bump.mjs && git add manifest.json versions.json",
+        "bumpversion": "node version-bump.mjs",
         "storybook": "storybook dev -p 5201 --no-open",
         "build-storybook": "storybook build",
         "test:unit": "vitest"
