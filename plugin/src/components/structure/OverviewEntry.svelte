@@ -20,8 +20,8 @@
 
     $: color = entry.type === 0 ? 'teal' : entry.type === 1 ? 'violet' : 'pink';
 
-    async function toggle_done(e: Event) {
-        const checked = (e.target as any).checked;
+    async function toggle_done(e: { detail: boolean }) {
+        const checked = e.detail;
 
         await toggle_done_workflow(entry, checked, move_file, write_metadata);
     }
@@ -35,7 +35,7 @@
         class:selected
     >
         {#if entry.type === 0}
-            <Checkbox checked={!!entry.done} on:change={toggle_done} />
+            <Checkbox checked={!!entry.done} on:changed={toggle_done} />
         {:else if entry.type === 1}
             <Flag classes="text-white" />
         {:else if entry.name === 'Inbox'}

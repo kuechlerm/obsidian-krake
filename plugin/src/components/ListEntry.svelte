@@ -10,7 +10,6 @@
     import Checkbox from './subcomponents/Checkbox.svelte';
     import DateIndicator from './subcomponents/DateIndicator.svelte';
     import Open from './icons/Open.svelte';
-    import Path from './subcomponents/Path.svelte';
     import { toggle_done_workflow } from '../workflows/toggle_done';
     import Flag from './icons/Flag.svelte';
     import Inbox from './icons/Inbox.svelte';

@@ -134,8 +134,6 @@ export const delete_file = (app: App) => async (file_path: string) => {
 export const write_metadata =
     (app: App) =>
     async (file_path: string, metadata: { [key: string]: string }) => {
-        console.log('write_metadata', file_path, metadata);
-
         const project_file = app.vault.getAbstractFileByPath(
             file_path
         ) as TFile | null;
