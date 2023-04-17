@@ -1,4 +1,4 @@
-import type { Child, Entry, EntryType, Parent } from '../types';
+import type { Child, Entry, EntryType, Parent, Write_Metadata } from '../types';
 import { name_from_file_path } from '../helper';
 import { db } from '../stores/db';
 import { paths } from '../paths';
@@ -10,10 +10,7 @@ export async function add_parent_workflow(
         parent_entry_type: EntryType,
         exclude_file_paths: string[]
     ) => Promise<Omit<Parent, 'parents'>>,
-    write_metadata: (
-        file_path: string,
-        metadata: { [key: string]: string }
-    ) => Promise<void> // write_metadata(app)(file_path, metadata)
+    write_metadata: Write_Metadata
 ) {
     const parent_info = await suggest_parent(parent_entry_type, [
         ...new Set([

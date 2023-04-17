@@ -45,7 +45,7 @@
         <div
             draggable={can_drag(entry)}
             on:dragstart={drag_start(entry)}
-            on:drop={drop(entry, $dragging_entry)}
+            on:drop={drop(entry, $dragging_entry, write_metadata)}
             on:dragover={drag_over(entry, $dragging_entry)}
             on:click={() => (selected_child = entry)}
             on:keyup

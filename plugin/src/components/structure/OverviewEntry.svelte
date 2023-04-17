@@ -11,6 +11,8 @@
     import Inbox from '../icons/Inbox.svelte';
     import Open from '../icons/Open.svelte';
     import Checkbox from '../subcomponents/Checkbox.svelte';
+    import HoverContent from '../subcomponents/HoverContent.svelte';
+    import Sprout from '../icons/Sprout.svelte';
 
     export let entry: Entry;
     export let selected: boolean;
@@ -35,7 +37,15 @@
         class:selected
     >
         {#if entry.type === 0}
-            <Checkbox checked={!!entry.done} on:changed={toggle_done} />
+            <HoverContent>
+                <Sprout classes="text-white" />
+
+                <Checkbox
+                    slot="hover_content"
+                    checked={!!entry.done}
+                    on:changed={toggle_done}
+                />
+            </HoverContent>
         {:else if entry.type === 1}
             <Flag classes="text-white" />
         {:else if entry.name === 'Inbox'}

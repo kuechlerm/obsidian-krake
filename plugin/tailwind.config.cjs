@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const config = {
-    content: [
-        './src/**/*.{html,js,svelte,ts}',
-        '../ui_components/src/lib/components/**/*.{html,js,svelte,ts}',
-    ],
+    content: ['./src/**/*.{html,js,svelte,ts}'],
 
     safelist: [
         'border-slate-600',

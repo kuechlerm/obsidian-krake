@@ -12,6 +12,12 @@
     export let migrate_db: () => Promise<void>;
 
     let current_tab = 'overview';
+
+    let call_update: () => void;
+    function reload() {
+        init_db();
+        call_update();
+    }
 </script>
 
 <div class="space-y-4">
@@ -42,12 +48,12 @@
         </div>
 
         <div>
-            <Button label="Reload" on:click={init_db} />
+            <Button label="Reload" on:click={reload} />
         </div>
     </div>
 
     {#if current_tab === 'overview'}
-        <Overview {open} {move_file} {write_metadata} />
+        <Overview {open} {move_file} {write_metadata} bind:call_update />
     {:else if current_tab === 'actions'}
         <Actions {migrate_db} />
     {/if}

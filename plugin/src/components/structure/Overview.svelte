@@ -16,14 +16,17 @@
     export let open: Open_File;
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
+    export const call_update = () => {
+        selected_entry = null;
+    };
 
     $: first_level_topics = $db.topics
         .filter((t) => t.parents.length === 0)
         .sort(sort_topic);
 
-    $: if (first_level_topics) {
-        selected_entry = first_level_topics[0];
-    }
+    // $: if (first_level_topics) {
+    //     selected_entry = first_level_topics[0];
+    // }
 
     let selected_entry: (Entry & { children: Child[] }) | null = null;
 
@@ -44,7 +47,7 @@
                 on:click={() => (selected_entry = topic)}
                 on:keyup
                 on:dragstart={drag_start(topic)}
-                on:drop={drop(topic, $dragging_entry)}
+                on:drop={drop(topic, $dragging_entry, write_metadata)}
                 on:dragover={drag_over(topic, $dragging_entry)}
             >
                 <OverviewEntry

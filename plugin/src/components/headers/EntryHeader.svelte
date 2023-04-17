@@ -34,6 +34,9 @@
     import HeaderFrame from './HeaderFrame.svelte';
     import HeaderLists from './HeaderLists.svelte';
     import Check from '../icons/Check.svelte';
+    import HoverContent from '../subcomponents/HoverContent.svelte';
+    import Sprout from '../icons/Sprout.svelte';
+    import { remove_parent_workflow } from '../../workflows/remove_parent';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -98,7 +101,14 @@
         if (!entry) return;
         const parent = e.detail;
 
-        db.remove_parent(entry, parent);
+        // TODO move to workflow?
+        const parent_entry = get_collection($db, parent.type).find(
+            (t) => t.file_path === parent.file_path
+        ) as Project | Topic | undefined;
+
+        if (!parent_entry) throw new Error('Parent not found');
+
+        await remove_parent_workflow(entry, parent_entry, write_metadata);
     }
 
     async function delete_entry() {
@@ -130,9 +140,25 @@
                 class="w-10 px-2.5 flex items-center bg-{color}-600 bg-opacity-70 h-auto rounded-br-lg"
             >
                 {#if entry.type === 0}
-                    <Checkbox checked={!!entry.done} on:changed={toggle_done} />
+                    <HoverContent>
+                        <Sprout classes="text-white" />
+
+                        <Checkbox
+                            slot="hover_content"
+                            checked={!!entry.done}
+                            on:changed={toggle_done}
+                        />
+                    </HoverContent>
                 {:else if entry.type === 1}
-                    <Flag classes="text-white" />
+                    <HoverContent>
+                        <Flag classes="text-white" />
+
+                        <Checkbox
+                            slot="hover_content"
+                            checked={!!entry.done}
+                            on:changed={toggle_done}
+                        />
+                    </HoverContent>
                 {:else if entry.name === 'Inbox'}
                     <Inbox classes="text-white" />
                 {:else}

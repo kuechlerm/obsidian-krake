@@ -7,6 +7,7 @@ import {
     TFile,
     type MarkdownPostProcessorContext,
 } from 'obsidian';
+import { paths } from '../paths';
 
 export const open_file =
     (app: App) =>
@@ -134,12 +135,15 @@ export const delete_file = (app: App) => async (file_path: string) => {
 export const write_metadata =
     (app: App) =>
     async (file_path: string, metadata: { [key: string]: string }) => {
-        const project_file = app.vault.getAbstractFileByPath(
+        // Inbox will never be changed
+        if (file_path === `${paths.topic}/Inbox.md`) return;
+
+        const entry_file = app.vault.getAbstractFileByPath(
             file_path
         ) as TFile | null;
-        if (!project_file) return;
+        if (!entry_file) return;
 
-        const project_content = await app.vault.read(project_file);
+        const project_content = await app.vault.read(entry_file);
 
         const krake_block = project_content
             .match(/```krake\ntype:entry-header([\s\S]*?)\n```/)
@@ -167,11 +171,11 @@ export const write_metadata =
         const [empty_line, after_krake_block] =
             project_content.split(krake_block);
 
-        const project_update = [
+        const file_update = [
             empty_line,
             krake_block_update,
             after_krake_block,
         ].join('');
 
-        await app.vault.modify(project_file, project_update);
+        await app.vault.modify(entry_file, file_update);
     };
