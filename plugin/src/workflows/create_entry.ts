@@ -32,7 +32,8 @@ export async function create_entry_workflow(args: {
     const clean_text = line_text
         .trimStart()
         .replace(/^-/, '')
-        .replace(/[^a-zäöüß0-9-_, ]/gi, '') // remove everything but text, numbers, space
+        // cannot use , or ; as they are used as separators in the metadata
+        .replace(/[^a-zäöüß0-9-_ ]/gi, '') // remove everything but text, numbers, space, - and _
         .trim();
 
     if (!clean_text) return;
