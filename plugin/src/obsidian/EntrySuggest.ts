@@ -1,6 +1,6 @@
 import { App, FuzzySuggestModal, TFile, TFolder } from 'obsidian';
 import type { EntryType, Parent } from '../types';
-import { byStringProperty, entry_type_to_folder_path } from '../helper';
+import { by_string_property, entry_type_to_folder_path } from '../helper';
 
 export class EntrySuggest extends FuzzySuggestModal<TFile> {
     constructor(
@@ -25,7 +25,7 @@ export class EntrySuggest extends FuzzySuggestModal<TFile> {
                 (c) =>
                     c instanceof TFile && !this.exclude_paths.includes(c.path)
             )
-            .sort(byStringProperty('name')) as TFile[];
+            .sort(by_string_property('name')) as TFile[];
     }
 
     getItemText(item: TFile): string {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { db } from '../../stores/db';
-    import { byStringProperty, get_collection } from '../../helper';
+    import { by_date_property, get_collection } from '../../helper';
     import { paths } from '../../paths';
     import type {
         Child,
@@ -29,7 +29,7 @@
         if (a.type > b.type) return -1;
         if (a.type < b.type) return 1;
 
-        return byStringProperty('name')(a, b);
+        return by_date_property('created')(a, b);
     };
 
     let selected_child: Entry | null = null;

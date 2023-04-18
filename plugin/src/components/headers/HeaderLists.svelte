@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { get_collection } from '../../helper';
+    import { by_date_property, get_collection } from '../../helper';
     import { db } from '../../stores/db';
     import type {
         DB,
@@ -24,9 +24,15 @@
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
 
-    $: filtered_topics = filter_entries($db, 2, hide_done);
-    $: filtered_projects = filter_entries($db, 1, hide_done);
-    $: filtered_tasks = filter_entries($db, 0, hide_done);
+    $: filtered_topics = filter_entries($db, 2, hide_done).sort(
+        by_date_property('created')
+    );
+    $: filtered_projects = filter_entries($db, 1, hide_done).sort(
+        by_date_property('created')
+    );
+    $: filtered_tasks = filter_entries($db, 0, hide_done).sort(
+        by_date_property('created')
+    );
 
     function filter_entries(db: DB, list_entry_type: EntryType, done: boolean) {
         const collection = get_collection(db, list_entry_type) as (

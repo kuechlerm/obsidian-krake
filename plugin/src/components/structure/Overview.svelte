@@ -1,6 +1,6 @@
 <script lang="ts">
     import { db } from '../../stores/db';
-    import { byStringProperty } from '../../helper';
+    import { by_string_property } from '../../helper';
     import type {
         Child,
         Entry,
@@ -34,7 +34,7 @@
         if (a.name === 'Inbox') return -1;
         if (b.name === 'Inbox') return 1;
 
-        return byStringProperty('name')(a, b);
+        return by_string_property('name')(a, b);
     };
 </script>
 

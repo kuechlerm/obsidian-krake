@@ -33,10 +33,9 @@
     import { change_date_workflow } from '../../workflows/change_date';
     import HeaderFrame from './HeaderFrame.svelte';
     import HeaderLists from './HeaderLists.svelte';
-    import Check from '../icons/Check.svelte';
     import HoverContent from '../subcomponents/HoverContent.svelte';
-    import Sprout from '../icons/Sprout.svelte';
     import { remove_parent_workflow } from '../../workflows/remove_parent';
+    import Diamond from '../icons/Diamond.svelte';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -141,7 +140,7 @@
             >
                 {#if entry.type === 0}
                     <HoverContent>
-                        <Sprout classes="text-white" />
+                        <Diamond classes="text-white" />
 
                         <Checkbox
                             slot="hover_content"

@@ -12,7 +12,7 @@
     import Open from '../icons/Open.svelte';
     import Checkbox from '../subcomponents/Checkbox.svelte';
     import HoverContent from '../subcomponents/HoverContent.svelte';
-    import Sprout from '../icons/Sprout.svelte';
+    import Diamond from '../icons/Diamond.svelte';
 
     export let entry: Entry;
     export let selected: boolean;
@@ -38,7 +38,7 @@
     >
         {#if entry.type === 0}
             <HoverContent>
-                <Sprout classes="text-white" />
+                <Diamond classes="text-white" />
 
                 <Checkbox
                     slot="hover_content"

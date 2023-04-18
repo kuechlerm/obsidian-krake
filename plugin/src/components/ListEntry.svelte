@@ -16,7 +16,7 @@
     import Folder from './icons/Folder.svelte';
     import { change_date_workflow } from '../workflows/change_date';
     import HoverContent from './subcomponents/HoverContent.svelte';
-    import Sprout from './icons/Sprout.svelte';
+    import Diamond from './icons/Diamond.svelte';
 
     // better type checking for do_date and due_date
     export let entry: Task | Project | Topic;
@@ -53,7 +53,7 @@
     >
         {#if entry.type === 0}
             <HoverContent>
-                <Sprout classes="text-white" />
+                <Diamond classes="text-white" />
 
                 <Checkbox
                     slot="hover_content"

@@ -73,9 +73,15 @@ export function get_collection(db: DB, entry_type: EntryType): Entry[] {
     throw new Error('Not possible');
 }
 
-export function byStringProperty<T>(name: keyof T) {
+export function by_string_property<T>(name: keyof T) {
     return (a: T, b: T) => {
         return String(a[name]).localeCompare(String(b[name]));
+    };
+}
+
+export function by_date_property<T>(name: keyof T) {
+    return (a: T, b: T) => {
+        return (a[name] as Date).getTime() - (b[name] as Date).getTime();
     };
 }
 
