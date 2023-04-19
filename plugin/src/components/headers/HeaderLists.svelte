@@ -24,6 +24,8 @@
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
 
+    export let show_parents: boolean = false;
+
     $: filtered_topics = filter_entries($db, 2, hide_done).sort(
         by_date_property('created')
     );
@@ -104,6 +106,7 @@
                     {#each filtered_topics as topic (topic.file_path)}
                         <ListEntry
                             entry={topic}
+                            {show_parents}
                             {open}
                             {move_file}
                             {write_metadata}
@@ -117,6 +120,7 @@
                     {#each filtered_projects as project (project.file_path)}
                         <ListEntry
                             entry={project}
+                            {show_parents}
                             {open}
                             {move_file}
                             {write_metadata}
@@ -130,6 +134,7 @@
                     {#each filtered_tasks as task (task.file_path)}
                         <ListEntry
                             entry={task}
+                            {show_parents}
                             {open}
                             {move_file}
                             {write_metadata}

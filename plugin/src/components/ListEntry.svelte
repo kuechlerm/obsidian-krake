@@ -17,6 +17,7 @@
     import { change_date_workflow } from '../workflows/change_date';
     import HoverContent from './subcomponents/HoverContent.svelte';
     import Diamond from './icons/Diamond.svelte';
+    import ParentPath from './subcomponents/ParentPath.svelte';
 
     // better type checking for do_date and due_date
     export let entry: Task | Project | Topic;
@@ -24,6 +25,8 @@
     export let open: Open_File;
     export let move_file: Move_File;
     export let write_metadata: Write_Metadata;
+
+    export let show_parents: boolean = false;
 
     $: color =
         entry.type === 0 ? 'teal' : entry?.type === 1 ? 'violet' : 'pink';
@@ -86,7 +89,9 @@
                     {entry.name}
                 </div>
 
-                <!-- <Path parents={entry.parents} {open} size="s" /> -->
+                {#if show_parents}
+                    <ParentPath parents={entry.parents} {open} size="s" />
+                {/if}
             </div>
         </div>
 

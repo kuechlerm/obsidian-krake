@@ -40,6 +40,7 @@
                     due_date_before: add(date, { days: 7 }),
                     done_on: date,
                 }}
+                show_parents={true}
                 {open}
                 {move_file}
                 {write_metadata}
