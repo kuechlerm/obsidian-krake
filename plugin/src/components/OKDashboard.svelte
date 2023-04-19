@@ -27,8 +27,8 @@
         <div class="flex gap-2 text-slate-200 font-medium">
             <div
                 class="inline-block cursor-pointer p-3
-                    border-0 border-b-4 border-solid border-transparent hover:text-white hover:border-slate-50"
-                class:border-slate-50={current_tab === 'overview'}
+                    border-0 border-y-4 border-solid border-transparent hover:text-white hover:border-b-slate-50"
+                class:border-b-slate-100={current_tab === 'overview'}
                 class:text-white={current_tab === 'overview'}
                 on:click={() => (current_tab = 'overview')}
                 on:keyup
@@ -37,8 +37,8 @@
             </div>
             <div
                 class="inline-block cursor-pointer p-3
-                    border-0 border-b-4 border-solid border-transparent hover:text-white hover:border-slate-50"
-                class:border-slate-50={current_tab === 'actions'}
+                    border-0 border-y-4 border-solid border-transparent hover:text-white hover:border-b-slate-50"
+                class:border-b-slate-100={current_tab === 'actions'}
                 class:text-white={current_tab === 'actions'}
                 on:click={() => (current_tab = 'actions')}
                 on:keyup
