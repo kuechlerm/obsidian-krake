@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Move_File, Open_File, Write_Metadata } from '../types';
     import Actions from './Actions.svelte';
+    import Infos from './Infos.svelte';
     import Overview from './structure/Overview.svelte';
     import Button from './subcomponents/Button.svelte';
 
@@ -45,6 +46,17 @@
             >
                 Actions
             </div>
+
+            <div
+                class="inline-block cursor-pointer p-3
+                border-0 border-y-4 border-solid border-transparent hover:text-white hover:border-b-slate-50"
+                class:border-b-slate-100={current_tab === 'infos'}
+                class:text-white={current_tab === 'infos'}
+                on:click={() => (current_tab = 'infos')}
+                on:keyup
+            >
+                Infos
+            </div>
         </div>
 
         <div>
@@ -56,5 +68,7 @@
         <Overview {open} {move_file} {write_metadata} bind:call_update />
     {:else if current_tab === 'actions'}
         <Actions {migrate_db} />
+    {:else if current_tab === 'infos'}
+        <Infos />
     {/if}
 </div>

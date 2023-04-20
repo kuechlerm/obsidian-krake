@@ -1,7 +1,7 @@
 {
     "name": "obsidian-krake",
     "type": "module",
-    "version": "2.0.8",
+    "version": "2.0.10",
     "description": "TODO",
     "main": "main.js",
     "scripts": {

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { isSameDay } from 'date-fns';
     import { by_date_property, get_collection } from '../../helper';
     import { db } from '../../stores/db';
     import type {
@@ -57,23 +58,25 @@
             const { done_on, do_date_before, due_date_before } = filter_info;
 
             const by_dates = (entry: Task | Project | Topic) => {
-                if (done_on && entry.done === done_on) return true;
+                if (done_on && entry.done) {
+                    return isSameDay(entry.done, done_on);
+                } else {
+                    if (
+                        do_date_before &&
+                        entry.type === 0 &&
+                        entry.do_date &&
+                        entry.do_date < do_date_before
+                    )
+                        return true;
 
-                if (
-                    do_date_before &&
-                    entry.type === 0 &&
-                    entry.do_date &&
-                    entry.do_date < do_date_before
-                )
-                    return true;
-
-                if (
-                    due_date_before &&
-                    entry.type !== 2 &&
-                    entry.due_date &&
-                    entry.due_date < due_date_before
-                )
-                    return true;
+                    if (
+                        due_date_before &&
+                        entry.type !== 2 &&
+                        entry.due_date &&
+                        entry.due_date < due_date_before
+                    )
+                        return true;
+                }
 
                 return false;
             };

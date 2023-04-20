@@ -1,28 +1,10 @@
-import {
-    Platform,
-    Plugin,
-    TFile,
-    TFolder,
-    WorkspaceLeaf,
-    addIcon,
-} from 'obsidian';
+import { Platform, Plugin, TFile, WorkspaceLeaf, addIcon } from 'obsidian';
 import { process_krake_codeblock } from './obsidian/codeblock_processor';
 import { SampleSettingTab } from './obsidian/SampleSettingTab';
 
 import './styles.css';
 import { create_entry } from './obsidian/commands';
 import { paths } from './paths';
-import {
-    create_default_project,
-    create_default_task,
-    create_default_topic,
-    db,
-} from './stores/db';
-import type { DB } from './types';
-import type { Topic } from './types';
-import type { Project } from './types';
-import type { Task } from './types';
-import type { Entry } from './types';
 import { change_path } from './workflows/change_path';
 import { write_metadata } from './obsidian/obsidian_helpers';
 import { OkDashboardView } from './obsidian/OKDashboardView';
