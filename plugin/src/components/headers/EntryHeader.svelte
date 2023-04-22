@@ -36,6 +36,7 @@
     import HoverContent from '../subcomponents/HoverContent.svelte';
     import { remove_parent_workflow } from '../../workflows/remove_parent';
     import Diamond from '../icons/Diamond.svelte';
+    import Check from '../icons/Check.svelte';
 
     export let path: string;
     // TODO alle actions zu db-store/adapter schieben
@@ -165,22 +166,24 @@
                 {/if}
             </div>
 
+            <div class="flex items-center gap-1 text-sm font-light">
+                {#if entry.done}
+                    <Check classes="w-4 text-slate-600" />
+                    {days_ago_text(entry.done)}
+                {/if}
+            </div>
+
             <div class="flex-1 pr-4 py-2 flex items-center justify-end">
                 <div class="flex gap-3 items-center">
                     <div class="flex items-center gap-1 text-sm font-light">
-                        <div class="w-5 flex items-center">
-                            <Add />
-                        </div>
+                        <Add classes="w-5" />
 
                         {#if entry.created}
                             {days_ago_text(entry.created)}
                         {/if}
                     </div>
                     <div class="flex items-center gap-1 text-sm font-light">
-                        <div class="w-5 flex items-center">
-                            <Eye />
-                        </div>
-
+                        <Eye classes="w-5" />
                         {days_ago_text(entry.last_review)}
                     </div>
 

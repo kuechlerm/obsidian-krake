@@ -121,9 +121,9 @@ export const Project_Header_with_Tasks: Story = {
             topics: [],
         });
 
-        await db.add_parent(task1, project);
-        await db.add_parent(task2, project);
-        await db.add_parent(task3, project);
+        db.add_parent(task1, project);
+        db.add_parent(task2, project);
+        db.add_parent(task3, project);
     },
 };
 
@@ -150,10 +150,26 @@ export const Topic_Header_with_Projects_and_Tasks: Story = {
             topics: [topic],
         });
 
-        await db.add_parent(task1, topic);
-        await db.add_parent(task2, topic);
-        await db.add_parent(task3, topic);
-        await db.add_parent(project1, topic);
-        await db.add_parent(project2, topic);
+        db.add_parent(task1, topic);
+        db.add_parent(task2, topic);
+        db.add_parent(task3, topic);
+        db.add_parent(project1, topic);
+        db.add_parent(project2, topic);
+    },
+};
+
+export const Done_Task_Header: Story = {
+    args: {
+        path: `${paths.task}/Task1.md`,
+    },
+    play: async () => {
+        const task = create_task(1);
+        task.done = new Date();
+
+        db.init({
+            tasks: [task],
+            projects: [],
+            topics: [],
+        });
     },
 };
