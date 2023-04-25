@@ -5,6 +5,7 @@
 
     export let target: string; // id
     export let show: boolean = false;
+    export let not_styled: boolean = false;
 
     // damit click-handler nicht direkt feuert
     let init = false;
@@ -42,9 +43,16 @@
         <div
             use:calc
             use:clickOutside={click_outside}
-            class="absolute w-max border border-solid border-neutral-700 rounded-lg bg-neutral-300 px-2 py-1"
+            class="absolute w-max bg-slate-50"
+            class:styled={!not_styled}
         >
             <slot />
         </div>
     </Portal>
 {/if}
+
+<style>
+    .styled {
+        @apply border border-solid border-neutral-700 rounded-lg px-2 py-1;
+    }
+</style>
