@@ -1,5 +1,5 @@
 import { paths } from '../paths';
-import { create_default_task } from '../stores/db';
+import { create_default_task, db } from '../stores/db';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { change_date_workflow } from './change_date';
 

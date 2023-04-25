@@ -18,6 +18,7 @@
     import HoverContent from './subcomponents/HoverContent.svelte';
     import Diamond from './icons/Diamond.svelte';
     import ParentPath from './subcomponents/ParentPath.svelte';
+    import { db } from '../stores/db';
 
     // better type checking for do_date and due_date
     export let entry: Task | Project | Topic;
@@ -33,6 +34,11 @@
 
     async function change_date() {
         await change_date_workflow(entry, write_metadata);
+
+        // TODO is this the right place?
+        if (entry.type === 0) $db.tasks = $db.tasks;
+        if (entry.type === 1) $db.projects = $db.projects;
+        if (entry.type === 2) $db.topics = $db.topics;
     }
 
     async function toggle_done(e: { detail: boolean }) {

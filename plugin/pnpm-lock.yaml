@@ -96,7 +96,7 @@ devDependencies:
     version: 3.3.1(postcss@8.4.23)
   tou-calendar:
     specifier: github:kuechlerm/tou-calendar
-    version: github.com/kuechlerm/tou-calendar/dfc95c769e1a0c593628a0c1fcd57eee774ff446(date-fns@2.29.3)(svelte@3.58.0)
+    version: github.com/kuechlerm/tou-calendar/2c83d084b3fb4b2bd06b47710d71817fe6e7be48(date-fns@2.29.3)(svelte@3.58.0)
   tslib:
     specifier: 2.5.0
     version: 2.5.0
@@ -8032,11 +8032,11 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  github.com/kuechlerm/tou-calendar/dfc95c769e1a0c593628a0c1fcd57eee774ff446(date-fns@2.29.3)(svelte@3.58.0):
-    resolution: {tarball: https://codeload.github.com/kuechlerm/tou-calendar/tar.gz/dfc95c769e1a0c593628a0c1fcd57eee774ff446}
-    id: github.com/kuechlerm/tou-calendar/dfc95c769e1a0c593628a0c1fcd57eee774ff446
+  github.com/kuechlerm/tou-calendar/2c83d084b3fb4b2bd06b47710d71817fe6e7be48(date-fns@2.29.3)(svelte@3.58.0):
+    resolution: {tarball: https://codeload.github.com/kuechlerm/tou-calendar/tar.gz/2c83d084b3fb4b2bd06b47710d71817fe6e7be48}
+    id: github.com/kuechlerm/tou-calendar/2c83d084b3fb4b2bd06b47710d71817fe6e7be48
     name: tou-calendar
-    version: 1.0.1
+    version: 1.0.3
     prepare: true
     requiresBuild: true
     peerDependencies:

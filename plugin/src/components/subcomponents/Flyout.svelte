@@ -51,7 +51,7 @@
     </Portal>
 {/if}
 
-<style>
+<style lang="postcss">
     .styled {
         @apply border border-solid border-neutral-700 rounded-lg px-2 py-1;
     }
