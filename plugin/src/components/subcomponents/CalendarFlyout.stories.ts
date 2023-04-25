@@ -7,7 +7,7 @@ const meta = {
     args: {
         selectedDate: undefined,
         show: true,
-        target: 'egal',
+        target_element: document.createElement('div'),
     },
     tags: [],
 } satisfies Meta<CalendarFlyout>;

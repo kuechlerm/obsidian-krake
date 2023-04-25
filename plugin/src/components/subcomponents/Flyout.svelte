@@ -3,7 +3,7 @@
     import clickOutside from './actions';
     import Portal from './Portal.svelte';
 
-    export let target: string; // id
+    export let target_element: HTMLElement;
     export let show: boolean = false;
     export let not_styled: boolean = false;
 
@@ -11,9 +11,6 @@
     let init = false;
 
     const calc = (flyout_element: HTMLElement) => {
-        const target_element = document.getElementById(target);
-        if (!target_element) return;
-
         computePosition(target_element, flyout_element, {
             placement: 'bottom',
             middleware: [offset(6), flip(), shift({ padding: 5 })],

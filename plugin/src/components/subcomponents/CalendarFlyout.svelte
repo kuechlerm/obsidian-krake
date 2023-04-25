@@ -3,10 +3,10 @@
     import Flyout from './Flyout.svelte';
 
     export let selectedDate: Date | undefined;
-    export let target: string; // id
+    export let target_element: HTMLElement;
     export let show: boolean = false;
 </script>
 
-<Flyout {target} bind:show not_styled>
+<Flyout {target_element} bind:show not_styled>
     <Calendar bind:selectedDate on:select />
 </Flyout>

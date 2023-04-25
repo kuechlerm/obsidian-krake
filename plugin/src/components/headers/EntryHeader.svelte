@@ -46,6 +46,8 @@
     export let suggest_parent: Suggest_Parent;
     export let delete_file: Delete_File;
 
+    let entry_picker: HTMLElement;
+
     let hide_done = true;
 
     // TODO path_to_collection?
@@ -64,6 +66,11 @@
 
     async function change_date() {
         if (!entry) return;
+
+        // TODO is this the right place?
+        if (entry.type === 0) $db.tasks = $db.tasks;
+        if (entry.type === 1) $db.projects = $db.projects;
+        if (entry.type === 2) $db.topics = $db.topics;
 
         change_date_workflow(entry, write_metadata);
     }
@@ -227,7 +234,10 @@
                     <Trash />
                 </div>
 
-                <Flyout target="entry_picker" bind:show={show_entry_picker}>
+                <Flyout
+                    target_element={entry_picker}
+                    bind:show={show_entry_picker}
+                >
                     <div class="flex flex-col gap-1">
                         {#if entry_type !== 0}
                             <div
@@ -262,7 +272,7 @@
                 </Flyout>
 
                 <div
-                    id="entry_picker"
+                    bind:this={entry_picker}
                     class="w-5 flex items-center cursor-pointer text-slate-900"
                     on:click={() => (show_entry_picker = true)}
                     on:keyup

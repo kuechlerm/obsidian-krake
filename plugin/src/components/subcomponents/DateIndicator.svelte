@@ -12,6 +12,7 @@
     export let due: boolean = false;
     export let muted: boolean = false;
 
+    let target_element: HTMLElement;
     let show_picker = false;
 
     $: distance = date ? differenceInCalendarDays(date, new Date()) : 0;
@@ -24,14 +25,14 @@
 </script>
 
 <CalendarFlyout
-    target="picker"
+    {target_element}
     bind:show={show_picker}
     bind:selectedDate={date}
     on:select={date_changed}
 />
 
 <div
-    id="picker"
+    bind:this={target_element}
     class="flex items-center gap-1 cursor-pointer text-slate-900 hover:text-opacity-100"
     class:text-opacity-30={muted && !date}
     class:past={distance < 0}
