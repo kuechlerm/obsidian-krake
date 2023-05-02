@@ -11,9 +11,8 @@ Obsidian Plugin zur Aufgabenverwaltung (GTD-ish).
 - Nutzer soll Styles anpassen können und/oder Styles nutzen Theme
 
 ## Fragen
-- eigenes Projekt für `ui_components` nötig oder lieber alles in `plugin` Projekt verschieben?
 - Code, Issues, Doku auf Deutsch oder Englisch?
-- wer kennt sich ein bisschen besser mit Github aus?
+- wer kennt sich ein bisschen besser mit Github (Actions) aus?
 
 ## Dev
 ### Tools / Setup
@@ -23,12 +22,16 @@ Obsidian Plugin zur Aufgabenverwaltung (GTD-ish).
 - dieses Repo in einen Dev-Vault klonen (`./<mein Dev Vault>/.obsidian/plugins/obsidian-krake/`)
   - main.js und styles.css (nach Build) + manifest.json befinden sich in Root-Folder, damit Dev-Vault das Plugin erkennt und nutzt
 
-### Workflow
-- aktuell sind die Svelte-Components in `./ui_components` ausgelagert, um per `pnpm dev` eine "Playground"-Seite nutzen zu können
-- `pnpm build` in `./ui_components` aktualisiert Svelte Componenten (und anderen Kram) in plugin
+### Workflows
+- `pnpm dev` startet watch mode, der das Plugin automatisch im Root-Order aktualisiert
+  - entspricht Plugin-Ordner in Dev-Vault, wenn aufgesetzt, wie in Setup beschrieben
+- `pnpm storybook` startet Storybook
+- `test:unit`führt Unit Tests aus
+  - am besten mit https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer
 
 ## "Deploy"
-Aktuell kann man `./plugin` bauen (`pnpm build:prod`) und `main.js`, `styles.css` und `./manifest.json` aus dem Root-Folder in einen Obsidian Vault Plugin Ordner kopieren (`./<mein Vault>/.obsidian/plugins/obsidian-krake/`).
+Aktuell kann man `./plugin` bauen (`pnpm build:prod`) und `main.js`, `styles.css` und `manifest.json` aus dem Root-Folder in einen Obsidian Vault Plugin Ordner kopieren (`./<mein Vault>/.obsidian/plugins/obsidian-krake/`).
+Eventuell in Obisian Community Plugins aktivieren.
 
 ### Tools
 - ist auf die neuste Version von Obisdian ausgelegt
@@ -37,29 +40,9 @@ Aktuell kann man `./plugin` bauen (`pnpm build:prod`) und `main.js`, `styles.css
     ```krake
     type:daily-header
     ```
-
-    ### Fällige Projekte
-    ```krake
-    type:projects
-    due_date:<{{date+8d:DD.MM.YYYY}}
-    done:={{date:DD.MM.YYYY}}
-    ```
-
-    ### Fällige Tasks
-    ```krake
-    type:tasks
-    due_date:<{{date+8d:DD.MM.YYYY}}
-    done:={{date:DD.MM.YYYY}}
-    ```
-
-    ### Geplante Tasks
-    ```krake
-    type:tasks
-    do_date:<{{date+1d:DD.MM.YYYY}}
-    done:={{date:DD.MM.YYYY}}
-    ```
-
-    ---
+    ### Tägliche Aktionen
+    - [ ] Spazieren gehen
+    - [ ] Wasser trinken
 
     ### Notizen
 ```
