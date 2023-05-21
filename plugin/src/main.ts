@@ -9,6 +9,7 @@ import { change_path } from './workflows/change_path';
 import { write_metadata } from './obsidian/obsidian_helpers';
 import { OkDashboardView } from './obsidian/OKDashboardView';
 import { init_db } from './obsidian/init_db';
+import { StoryWhiteboardView } from './obsidian/StoryWhiteboardView';
 
 // @ts-ignore
 const version = __version__;
@@ -34,6 +35,13 @@ export default class ObsidianKrakePlugin extends Plugin {
         );
 
         await this.loadSettings();
+
+        this.registerView(
+            StoryWhiteboardView.getViewTypeName(),
+            (leaf: WorkspaceLeaf) => new StoryWhiteboardView(leaf, this.app)
+        );
+
+        this.registerExtensions(['sb'], StoryWhiteboardView.getViewTypeName());
 
         this.registerView(
             OkDashboardView.getViewTypeName(),
