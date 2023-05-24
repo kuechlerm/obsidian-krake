@@ -31,14 +31,7 @@
 
         moved = true;
 
-        if (story.position.x + event.movementX < 0) {
-            story.position.x = 0;
-        }
         story.position.x += event.movementX;
-
-        if (story.position.y + event.movementY < 0) {
-            story.position.y = 0;
-        }
         story.position.y += event.movementY;
     }
 
@@ -56,9 +49,9 @@
 
 <div
     class="absolute border border-solid border-neutral-500 bg-neutral-300 rounded-md p-4 cursor-pointer"
-    style="left: {story.position.x}px; top: {story.position.y}px;"
+    style="transform: translate({story.position.x}px, {story.position.y}px)"
     class:moved
-    on:mousedown={start_dragging}
+    on:mousedown|stopPropagation={start_dragging}
     on:dblclick
 >
     {story.titel}
